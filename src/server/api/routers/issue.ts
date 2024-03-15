@@ -37,4 +37,26 @@ export const issueRouter = createTRPCRouter({
     });
     return issue;
   }),
+  update: publicProcedure.input(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+      description: z.string(),
+      status: z.enum(['OPEN', 'CLOSED', 'IN_PROGRESS'])
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
+
+    const issue = await ctx.db.issue.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        title: input.title,
+        description: input.description,
+        status: input.status
+      }
+    });
+    return issue;
+  }),
 });
