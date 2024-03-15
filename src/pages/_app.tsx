@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+import "~/styles/dashboard.css";
+import "~/styles/create.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({

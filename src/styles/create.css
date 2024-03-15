@@ -1,0 +1,16 @@
+#description {
+  height: 50px;
+}
+
+#create-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+
+#create-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
