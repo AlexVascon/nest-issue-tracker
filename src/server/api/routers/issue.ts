@@ -23,4 +23,18 @@ export const issueRouter = createTRPCRouter({
 
     return issue;
   }),
+  getById: publicProcedure.input(
+    z.object({
+      id: z.number(),
+    })
+  )
+  .query(async ({ ctx, input }) => {
+
+    const issue = await ctx.db.issue.findUnique({
+      where: {
+        id: input.id,
+      },
+    });
+    return issue;
+  }),
 });
