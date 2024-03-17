@@ -1,16 +1,23 @@
 import { useUser } from "@clerk/nextjs";
 import Link from 'next/link'
-
+import dayjs from "dayjs";
 import { api } from "~/utils/api";
 
 export default function Dashboard() {
   const { data } = api.issue.getAll.useQuery();
   const user = useUser();
 
+  // <span className="font-thin">{` · ${dayjs(
+  //   post.createdAt
+  // ).fromNow()}`}</span>
+
   return (
-    <>
     <div>
-      <button id="create">Create</button>
+      <div className='status'>
+        <Link href="/create">
+        <button id="create">Create</button>
+        </Link>
+      </div>
     <table id="issues">
       <tr>
         <th>Issue</th>
@@ -18,18 +25,20 @@ export default function Dashboard() {
         <th>Created</th>
       </tr>
       {data?.map((issue) => (
-        <td>
-          <Link href={`/issue/${issue.id}`}>
+         
             <tr>
-              <td>{issue.title}</td>
+              <td>
+                <Link href={`/issue/${issue.id}`}>
+                {issue.title}
+                </Link>
+                </td>
+             
               <td>{issue.status}</td>
-              <td>{}</td>
+              <td>{dayjs(issue.createdAt).date()}</td>
             </tr>
-          </Link>
-        </td>
+
       ))}
       </table>
     </div>
-    </>
   );
 }

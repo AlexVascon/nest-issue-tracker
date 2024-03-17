@@ -1,3 +1,12 @@
+#create {
+  text-align: right;
+  padding: 10px;
+  margin-right: 5px;
+  background-color: purple;
+  border-radius: 10px;
+  color: white;
+}
+
 #issues {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -12,8 +21,27 @@
   color: white;
 }
 
-#create {
-  align-items: right;
-  padding: 10px;
-  background-color: purple;
+#issues td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
 }
+
+#issues tr:nth-child(even){background-color: #f2f2f2;}
+
+#issues tr:hover {background-color: #ddd;}
+
+#issues th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+.status {
+  text-align: right;
+  width: 100%;
+  margin: 5px;
+  padding: 5px;
+}
+
