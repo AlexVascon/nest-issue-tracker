@@ -95,4 +95,20 @@ export const commentRouter = createTRPCRouter({
       }
     });
   }),
+  delete: publicProcedure.input(
+    z.object({
+      commentId: z.number(),
+      userId: z.string(),
+      authorId: z.string()
+    })
+  )
+  .mutation(({ ctx, input }) => {
+    const {userId, authorId} = input;
+    if(userId !== authorId) return;
+    ctx.db.comment.delete({
+      where: {
+        id: input.commentId
+      }
+    })
+  }),
 });
