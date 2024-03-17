@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { RouterOutputs } from "~/utils/api";
+import dayjs from "dayjs";
 
 type CommentWithUser = RouterOutputs["comment"]["getIssueComments"][number];
 const Comment = (props: CommentWithUser) => {
@@ -19,7 +20,7 @@ const Comment = (props: CommentWithUser) => {
       <div className="test">
       <div className="top">
         <h3>{author.username}</h3>
-        <p>6 minutes ago</p>
+        <p>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</p>
       </div>
         <p>{comment.description}</p>
       </div>

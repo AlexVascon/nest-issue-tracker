@@ -5,6 +5,7 @@ import { NextPage } from "next";
 import CreateComment from "~/components/CreateComment";
 import Comment from "~/components/Comment";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 enum STATUS{
   OPEN = "OPEN",
@@ -42,16 +43,21 @@ const IssuePage: NextPage = () => {
   }
 
   return (
-    <div id="create-page">
+    <div className="page">
+      <div className="back">
+       <Link href="/dashboard">
+        <button className="back-btn">Back</button>
+      </Link>
+      </div>
       <div className="btns">
         {!edit && <button id="edit-btn" onClick={() => setEdit(!edit)}>Edit</button>}
         {edit && <button id="cancel-btn" onClick={() => setEdit(!edit)}>Cancel</button>}
       </div>
       <form id="edit-form" onSubmit={handleSubmit}>
         <label>Title</label>
-        <input disabled={edit} type="text" value={title} />
+        <input disabled={edit} type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         <label>Description</label>
-        <input disabled={edit} type="text" id="description" value={description}  />
+        <input disabled={edit} className="description" value={description} onChange={(e) => setDescription(e.target.value)}  />
         <select disabled={edit} value={status} onChange={(e) => setStatus(e.target.value as STATUS)}>
           <option value={STATUS.OPEN}>OPEN</option>
           <option value={STATUS.IN_PROGRESS}>IN PROGRESS</option>
@@ -60,12 +66,11 @@ const IssuePage: NextPage = () => {
         <div className="submit-btn-container">
         {edit && <button type="submit">Submit</button>}
         </div>
-
       </form>
       <div id="comments">
       <CreateComment issueId={issueId} authorId={authorId || ''} />
       {issueComments && issueComments.data?.map((comment) => (
-        <Comment {...comment}/>
+        <Comment key={comment.comment.id} {...comment}/>
       ))}
     </div>
     </div>

@@ -1,3 +1,12 @@
+#create-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  width: 100%;
+}
+
 #description {
   height: 150px;
 }
@@ -16,12 +25,6 @@
   margin-top: 10px;
 }
 
-#create-form input {
-  border: 1px solid rgb(231, 222, 244);
-  border-radius: 5px;
-  padding: 5px;
-}
-
 #create-form button {
   margin-top: 15px;
   background-color: rgb(144, 107, 178);
@@ -37,11 +40,3 @@
   width: 100%;
 }
 
-#create-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  flex-direction: column;
-  width: 100%;
-}

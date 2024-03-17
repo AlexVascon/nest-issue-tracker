@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
 import { NextPage } from "next";
+import { Issue } from "@prisma/client";
 
 enum STATUS{
   OPEN = "OPEN",
@@ -16,7 +17,7 @@ const Dashboard: NextPage = () => {
 
   const [status, setStatus] = useState(STATUS.OPEN);
   const [issues, setIssues] = useState(data);
-  const [filterList, setFilterList] = useState(issues);
+  const [filterList, setFilterList] = useState<Issue[]>();
 
   useEffect(() => {
     if(data) {
@@ -35,7 +36,7 @@ const Dashboard: NextPage = () => {
   }, [status]);
 
   return (
-    <div id="dashboard-page">
+    <div className="page">
       <div className='options'>
         <select value={status} onChange={(e) => setStatus(e.target.value as STATUS)}>
           <option value={'ALL'}>ALL</option>
@@ -48,21 +49,26 @@ const Dashboard: NextPage = () => {
         </Link>
       </div>
     <table id="issues">
+
       <tr>
         <th>Issue</th>
         <th>Status</th>
         <th>Created</th>
       </tr>
       {filterList?.map((issue) => (
-            <tr>
-              <td>
-                <Link 
-                href={`/issue/${issue.id}`}>
-                {issue.title}
-                </Link>
+            <tr key={issue.id}>
+                <td>
+                  <Link 
+                   href={`/issue/${issue.id}`}>
+                  {issue.title}
+                  </Link>
                 </td>
-              <td>{issue.status}</td>
-              <td>{dayjs(issue.createdAt).format("DD/MM/YYYY")}</td>
+              <td>
+                {issue.status}
+              </td>
+              <td>
+                {dayjs(issue.createdAt).format("DD/MM/YYYY")}
+              </td>
             </tr>
       ))}
       </table>

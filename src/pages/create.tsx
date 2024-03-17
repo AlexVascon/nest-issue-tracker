@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
+import Link from "next/link";
 
 const Create: NextPage = () => {
   const user = useUser();
@@ -27,6 +28,11 @@ const Create: NextPage = () => {
 
   return (
     <div id="create-page">
+      <div className="back">
+      <Link href="/dashboard">
+        <button className="back-btn">Back</button>
+      </Link>
+      </div>
       <form id="create-form" onSubmit={handleSubmit}>
         <label>Title</label>
         <input type="text" onChange={(e) => setTitle(e.target.value)} />

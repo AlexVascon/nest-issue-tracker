@@ -18,8 +18,10 @@ const CreateComment = (props: ICreateCommentProps) => {
   return (
     <div id="create-comment">
       <label >Write comment</label>
-     <input type="text" onChange={(e) => setDescription(e.target.value)}  />
+     <input className="description" type="text" onChange={(e) => setDescription(e.target.value)}  />
+     <div>
      <button onClick={handleSubmit}>Post</button>
+     </div>
     </div>
   );
 }

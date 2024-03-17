@@ -38,5 +38,19 @@
 }
 
 #comments-list {
-  
+  padding: 10px 0px 10px 0px;
+  margin: 10px 0px 10px 0px;
+}
+
+#comments-list img {
+  margin-right: 20px;
+}
+
+.top h3 {
+  margin-right: 15px;
+}
+
+.top p {
+  font-size: 12;
+  color: rgb(111, 111, 111);
 }
