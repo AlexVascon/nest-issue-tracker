@@ -1,4 +1,5 @@
 import { User } from "@clerk/backend";
+
 export const filterUserForClient = (user: User) => {
   return {
     id: user.id,

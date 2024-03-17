@@ -1,6 +1,5 @@
 import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
-import Link from "next/link";
 import Dashboard from "./dashboard";
 
 export default function Home() {

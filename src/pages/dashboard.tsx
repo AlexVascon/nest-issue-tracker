@@ -1,10 +1,9 @@
-import { useUser } from "@clerk/nextjs";
-import Link from 'next/link'
+import Link from "next/link";
 import dayjs from "dayjs";
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
 
-enum Status{
+enum STATUS{
   OPEN = "OPEN",
   CLOSED = "CLOSED",
   IN_PROGRESS = "IN_PROGRESS",
@@ -14,13 +13,16 @@ enum Status{
 export default function Dashboard() {
   const { data } = api.issue.getAll.useQuery();
 
-  const [status, setStatus] = useState(Status.OPEN);
+  const [status, setStatus] = useState(STATUS.OPEN);
   const [issues, setIssues] = useState(data);
   const [filterList, setFilterList] = useState(issues);
 
   useEffect(() => {
-    if(data) setIssues(data);
-  }, data)
+    if(data) {
+      setIssues(data);
+      setFilterList(issues);
+    } 
+  }, [data]);
 
   useEffect(() => {
     if(status === "ALL") {
@@ -29,17 +31,16 @@ export default function Dashboard() {
     }
     const filteredList = issues?.filter((issue) => issue.status === status);
     setFilterList(filteredList);
-  }, [status])
-
+  }, [status]);
 
   return (
     <div id="dashboard-page">
       <div className='options'>
-        <select value={status} onChange={(e) => setStatus(e.target.value as Status)}>
+        <select value={status} onChange={(e) => setStatus(e.target.value as STATUS)}>
           <option value={'ALL'}>ALL</option>
-          <option value={Status.OPEN}>OPEN</option>
-          <option value={Status.IN_PROGRESS}>IN PROGRESS</option>
-          <option value={Status.CLOSED}>CLOSED</option>
+          <option value={STATUS.OPEN}>OPEN</option>
+          <option value={STATUS.IN_PROGRESS}>IN PROGRESS</option>
+          <option value={STATUS.CLOSED}>CLOSED</option>
         </select>
         <Link href="/create">
         <button id="create-button">Create</button>
@@ -52,7 +53,6 @@ export default function Dashboard() {
         <th>Created</th>
       </tr>
       {filterList?.map((issue) => (
-         
             <tr>
               <td>
                 <Link 
@@ -60,11 +60,9 @@ export default function Dashboard() {
                 {issue.title}
                 </Link>
                 </td>
-             
               <td>{issue.status}</td>
-              <td>{dayjs(issue.createdAt).date()}</td>
+              <td>{dayjs(issue.createdAt).format("DD/MM/YYYY")}</td>
             </tr>
-
       ))}
       </table>
     </div>

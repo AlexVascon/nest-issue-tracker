@@ -1,7 +1,4 @@
-import { useState, FormEvent, useEffect } from "react";
-import { useRouter } from 'next/navigation'
 import Image from "next/image";
-
 import { RouterOutputs } from "~/utils/api";
 
 type CommentWithUser = RouterOutputs["comment"]["getIssueComments"][number];
