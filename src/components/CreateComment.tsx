@@ -3,7 +3,7 @@ import {api } from "~/utils/api";
 
 interface ICreateCommentProps {
   issueId: number;
-  authorId: number;
+  authorId: string;
 }
 const CreateComment = (props: ICreateCommentProps) => {
   const {issueId, authorId} = props;
@@ -14,7 +14,6 @@ const CreateComment = (props: ICreateCommentProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await createComment.mutateAsync({description, issueId, authorId});
-
   }
   return (
     <div id="create-comment">

@@ -9,15 +9,15 @@ export default function Create() {
   const [description, setDescription] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
-  const user = useUser()
-  const authorId = Number(user.user?.id);
+  const user = useUser();
+  const authorId = user.user?.id;
   const createIssue = api.issue.create.useMutation();
   const router = useRouter()
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    await createIssue.mutateAsync({description, title, authorId});
+    await createIssue.mutateAsync({description, title, authorId: authorId || ''});
     setIsSubmitted(true);
     router.push('/dashboard', { scroll: false })
   }

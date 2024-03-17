@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { api } from "~/utils/api";
 import { NextPage } from "next";
 import CreateComment from "~/components/CreateComment";
+import Comment from "~/components/Comment";
 import { useUser } from "@clerk/nextjs";
 
 enum Status{
@@ -13,15 +14,15 @@ enum Status{
 
 const IssuePage: NextPage = () => {
   const user = useUser();
-  const test = user.user;
-  const authorId = Number(user.user?.id);
+  const authorId = user.user?.id;
   const router = useRouter()
   const { id } = router.query
   const issueId = Number(id);
-  const [isDisabled, setIsDisabled] = useState(true);
   const { data }  = api.issue.getById.useQuery({ id: issueId });
   const updateIssue = api.issue.update.useMutation()
+  const issueComments = api.comment.getIssueComments.useQuery({issueId})
 
+  const [isDisabled, setIsDisabled] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [status, setStatus] = useState<Status>(Status.OPEN);
@@ -58,7 +59,10 @@ const IssuePage: NextPage = () => {
         <button type="submit">Submit</button>
       </form>
       <div id="comments">
-      <CreateComment issueId={issueId} authorId={authorId} />
+      <CreateComment issueId={issueId} authorId={authorId || ''} />
+      {issueComments && issueComments.data?.map((comment) => (
+        <Comment {...comment}/>
+      ))}
     </div>
     </div>
     </>

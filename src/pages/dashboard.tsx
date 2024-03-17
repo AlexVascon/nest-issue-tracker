@@ -25,7 +25,7 @@ export default function Dashboard() {
               <td>
                 <Link 
                 href={`/issue/${issue.id}`}>
-                {issue.id}
+                {issue.title}
                 </Link>
                 </td>
              

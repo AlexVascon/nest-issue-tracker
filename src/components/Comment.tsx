@@ -2,7 +2,7 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 import Image from "next/image";
 
-import { RouterOutputs, api } from "~/utils/api";
+import { RouterOutputs } from "~/utils/api";
 
 type CommentWithUser = RouterOutputs["comment"]["getIssueComments"][number];
 const Comment = (props: CommentWithUser) => {
@@ -30,3 +30,5 @@ const Comment = (props: CommentWithUser) => {
     </div>
   );
 }
+
+export default Comment;
