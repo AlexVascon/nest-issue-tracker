@@ -1,0 +1,78 @@
+#description {
+  height: 150px;
+}
+
+#edit-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 700px;
+  width: 100%;
+}
+
+#edit-form select {
+  margin: 10px 0px 0px 10px;
+}
+
+#edit-form label {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#edit-form input {
+  border: 1px solid rgb(231, 222, 244);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#edit-form button {
+  margin-top: 15px;
+  background-color: rgb(144, 107, 178);
+  width: 80px;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+}
+
+.submit-button {
+  display: flex;
+  justify-content: right;
+  width: 100%;
+}
+
+#cedit-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  width: 100%;
+}
+
+.btns {
+  display: flex;
+  width: 47%;
+  justify-content: right;
+}
+
+#edit-btn {
+  background-color: rgb(77, 77, 219);
+  border-radius: 5px;
+  padding: 5px 20px 5px 20px;
+  color: white;
+}
+
+
+#cancel-btn {
+  background-color: rgb(219, 77, 105);
+  border-radius: 5px;
+  padding: 5px 20px 5px 20px;
+  color: white;
+}
+
+.submit-btn-container {
+  display: flex;
+  width: 100%;
+  justify-content: right;
+}

@@ -7,6 +7,7 @@ import "~/styles/globals.css";
 import "~/styles/dashboard.css";
 import "~/styles/create.css";
 import "~/styles/comment.css";
+import "~/styles/edit.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({

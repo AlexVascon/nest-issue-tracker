@@ -22,6 +22,7 @@ const IssuePage: NextPage = () => {
   const updateIssue = api.issue.update.useMutation()
   const issueComments = api.comment.getIssueComments.useQuery({issueId})
 
+  const [edit, setEdit] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -45,18 +46,24 @@ const IssuePage: NextPage = () => {
   return (
     <>
     <div id="create-page">
-      <button onClick={() => setIsDisabled(!isDisabled)}>Edit</button>
-      <form id="create-form" onSubmit={handleSubmit}>
+      <div className="btns">
+        {!edit && <button id="edit-btn" onClick={() => setEdit(!edit)}>Edit</button>}
+        {edit && <button id="cancel-btn" onClick={() => setEdit(!edit)}>Cancel</button>}
+      </div>
+      <form id="edit-form" onSubmit={handleSubmit}>
         <label>Title</label>
-        <input disabled={isDisabled} type="text" value={title} />
+        <input disabled={edit} type="text" value={title} />
         <label>Description</label>
-        <input disabled={isDisabled} type="text" id="description" value={description}  />
-        <select value={status} onChange={(e) => setStatus(e.target.value as Status)}>
+        <input disabled={edit} type="text" id="description" value={description}  />
+        <select disabled={edit} value={status} onChange={(e) => setStatus(e.target.value as Status)}>
           <option value={Status.OPEN}>OPEN</option>
           <option value={Status.IN_PROGRESS}>IN PROGRESS</option>
           <option value={Status.CLOSED}>CLOSED</option>
         </select>
-        <button type="submit">Submit</button>
+        <div className="submit-btn-container">
+        {edit && <button type="submit">Submit</button>}
+        </div>
+
       </form>
       <div id="comments">
       <CreateComment issueId={issueId} authorId={authorId || ''} />
