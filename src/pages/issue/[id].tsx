@@ -13,6 +13,7 @@ enum Status{
 
 const IssuePage: NextPage = () => {
   const user = useUser();
+  const test = user.user;
   const authorId = Number(user.user?.id);
   const router = useRouter()
   const { id } = router.query

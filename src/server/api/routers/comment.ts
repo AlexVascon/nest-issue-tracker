@@ -48,7 +48,7 @@ const addUserDataToComment = async (comments: Comment[]) => {
 export const commentRouter = createTRPCRouter({
   getIssueComments: publicProcedure.input( 
     z.object({
-    issueId: z.number(),
+    issueId: z.string(),
   })
 ).query(async({ ctx, input }) => {
     const comments = await ctx.db.comment.findMany({
@@ -62,9 +62,9 @@ export const commentRouter = createTRPCRouter({
   }),
   create: publicProcedure.input(
     z.object({
-      issueId: z.number(),
+      issueId: z.string(),
       description: z.string(),
-      authorId: z.number()
+      authorId: z.string()
     })
   )
   .mutation(async ({ ctx, input }) => {
