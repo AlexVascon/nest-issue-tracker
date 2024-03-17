@@ -10,6 +10,7 @@ export const issueRouter = createTRPCRouter({
     z.object({
       title: z.string(),
       description: z.string(),
+      authorId: z.number(),
     })
   )
   .mutation(async ({ ctx, input }) => {
@@ -18,6 +19,7 @@ export const issueRouter = createTRPCRouter({
       data: {
         title: input.title,
         description: input.description,
+        authorId: input.authorId,
       },
     });
 

@@ -2,19 +2,22 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 
 import { api } from "~/utils/api";
+import { useUser } from "@clerk/nextjs";
 
 export default function Create() {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 
+  const user = useUser()
+  const authorId = Number(user.user?.id);
   const createIssue = api.issue.create.useMutation();
   const router = useRouter()
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    await createIssue.mutateAsync({description, title});
+    await createIssue.mutateAsync({description, title, authorId});
     setIsSubmitted(true);
     router.push('/dashboard', { scroll: false })
   }
