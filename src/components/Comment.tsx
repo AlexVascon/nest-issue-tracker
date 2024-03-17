@@ -8,7 +8,7 @@ type CommentWithUser = RouterOutputs["comment"]["getIssueComments"][number];
 const Comment = (props: CommentWithUser) => {
   const { comment, author } = props;
   return (
-    <div id="create-page">
+    <div id="comments-list">
        <div className="card">
         <div className='img'>
         <Image

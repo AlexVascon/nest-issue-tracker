@@ -61,4 +61,15 @@ export const issueRouter = createTRPCRouter({
     });
     return issue;
   }),
+  filter: publicProcedure.input(
+    z.object({
+      status: z.enum(['OPEN', 'CLOSED', 'IN_PROGRESS']),
+    })
+  ).query(({ ctx, input }) => {
+    return ctx.db.issue.findMany({
+      where: {
+        status: input.status
+      }
+    });
+  }),
 });
