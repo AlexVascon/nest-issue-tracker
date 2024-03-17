@@ -33,16 +33,16 @@ export default function Dashboard() {
 
 
   return (
-    <div>
-      <div className='status'>
-      <select value={status} onChange={(e) => setStatus(e.target.value as Status)}>
+    <div id="dashboard-page">
+      <div className='options'>
+        <select value={status} onChange={(e) => setStatus(e.target.value as Status)}>
           <option value={'ALL'}>ALL</option>
           <option value={Status.OPEN}>OPEN</option>
           <option value={Status.IN_PROGRESS}>IN PROGRESS</option>
           <option value={Status.CLOSED}>CLOSED</option>
         </select>
         <Link href="/create">
-        <button id="create">Create</button>
+        <button id="create-button">Create</button>
         </Link>
       </div>
     <table id="issues">
