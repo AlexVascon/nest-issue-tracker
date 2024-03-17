@@ -1,8 +1,9 @@
 import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Dashboard from "./dashboard";
+import { NextPage } from "next";
 
-export default function Home() {
+const Home: NextPage = () => {
   const user = useUser();
 
   return (
@@ -19,3 +20,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;

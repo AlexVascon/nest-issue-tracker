@@ -2,6 +2,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import { api } from "~/utils/api";
 import { useEffect, useState } from "react";
+import { NextPage } from "next";
 
 enum STATUS{
   OPEN = "OPEN",
@@ -10,7 +11,7 @@ enum STATUS{
   ALL = "ALL"
 }
 
-export default function Dashboard() {
+const Dashboard: NextPage = () => {
   const { data } = api.issue.getAll.useQuery();
 
   const [status, setStatus] = useState(STATUS.OPEN);
@@ -68,3 +69,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;

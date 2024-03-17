@@ -7,7 +7,7 @@ interface ICreateCommentProps {
 }
 const CreateComment = (props: ICreateCommentProps) => {
   const {issueId, authorId} = props;
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState<string>('');
 
   const createComment = api.comment.create.useMutation();
 

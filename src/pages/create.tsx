@@ -2,8 +2,9 @@ import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
+import { NextPage } from "next";
 
-export default function Create() {
+const Create: NextPage = () => {
   const user = useUser();
   const authorId = user.user?.id;
   const createIssue = api.issue.create.useMutation();
@@ -38,3 +39,5 @@ export default function Create() {
     </div>
   );
 }
+
+export default Create;
