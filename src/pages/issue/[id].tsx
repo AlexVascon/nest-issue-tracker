@@ -1,8 +1,9 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from 'next/router'
-
 import { api } from "~/utils/api";
 import { NextPage } from "next";
+import CreateComment from "~/components/CreateComment";
+import { useUser } from "@clerk/nextjs";
 
 enum Status{
   OPEN = "OPEN",
@@ -11,6 +12,8 @@ enum Status{
 }
 
 const IssuePage: NextPage = () => {
+  const user = useUser();
+  const authorId = Number(user.user?.id);
   const router = useRouter()
   const { id } = router.query
   const issueId = Number(id);
@@ -53,6 +56,9 @@ const IssuePage: NextPage = () => {
         </select>
         <button type="submit">Submit</button>
       </form>
+      <div id="comments">
+      <CreateComment issueId={issueId} authorId={authorId} />
+    </div>
     </div>
     </>
   );

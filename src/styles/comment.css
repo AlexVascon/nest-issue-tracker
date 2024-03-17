@@ -1,0 +1,14 @@
+.top {
+  display: flex;
+  flex-direction: row;
+}
+
+#comments {
+  max-width: 700px;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+}

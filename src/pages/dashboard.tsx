@@ -5,11 +5,6 @@ import { api } from "~/utils/api";
 
 export default function Dashboard() {
   const { data } = api.issue.getAll.useQuery();
-  const user = useUser();
-
-  // <span className="font-thin">{` · ${dayjs(
-  //   post.createdAt
-  // ).fromNow()}`}</span>
 
   return (
     <div>

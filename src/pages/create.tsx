@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 
 import { api } from "~/utils/api";
 
-export default function Dashboard() {
+export default function Create() {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
