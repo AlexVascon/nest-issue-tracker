@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const issueRouter = createTRPCRouter({
@@ -15,15 +14,13 @@ export const issueRouter = createTRPCRouter({
   )
   .mutation(async ({ ctx, input }) => {
 
-    const issue = await ctx.db.issue.create({
+    return await ctx.db.issue.create({
       data: {
         title: input.title,
         description: input.description,
         authorId: input.authorId,
       },
     });
-
-    return issue;
   }),
   getById: publicProcedure.input(
     z.object({
@@ -32,12 +29,11 @@ export const issueRouter = createTRPCRouter({
   )
   .query(async ({ ctx, input }) => {
 
-    const issue = await ctx.db.issue.findUnique({
+    return await ctx.db.issue.findUnique({
       where: {
         id: input.id,
       },
     });
-    return issue;
   }),
   update: publicProcedure.input(
     z.object({
@@ -49,7 +45,7 @@ export const issueRouter = createTRPCRouter({
   )
   .mutation(async ({ ctx, input }) => {
 
-    const issue = await ctx.db.issue.update({
+    return await ctx.db.issue.update({
       where: {
         id: input.id,
       },
@@ -59,13 +55,14 @@ export const issueRouter = createTRPCRouter({
         status: input.status
       }
     });
-    return issue;
   }),
   filter: publicProcedure.input(
     z.object({
       status: z.enum(['OPEN', 'CLOSED', 'IN_PROGRESS']),
     })
-  ).query(({ ctx, input }) => {
+  )
+  .query(({ ctx, input }) => {
+
     return ctx.db.issue.findMany({
       where: {
         status: input.status

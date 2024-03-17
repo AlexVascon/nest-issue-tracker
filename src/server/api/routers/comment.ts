@@ -25,7 +25,6 @@ const addUserDataToComment = async (comments: Comment[]) => {
       });
     }
     if (!author.username) {
-      // user the ExternalUsername
       if (!author.externalUsername) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -50,7 +49,9 @@ export const commentRouter = createTRPCRouter({
     z.object({
     issueId: z.number(),
   })
-).query(async({ ctx, input }) => {
+)
+.query(async({ ctx, input }) => {
+
     const comments = await ctx.db.comment.findMany({
       where: {
         issueId: input.issueId,
@@ -69,50 +70,29 @@ export const commentRouter = createTRPCRouter({
   )
   .mutation(async ({ ctx, input }) => {
 
-    const issue = await ctx.db.comment.create({
+    return await ctx.db.comment.create({
       data: {
         issueId: input.issueId,
         description: input.description,
         authorId: input.authorId
       },
     });
-
-    return issue;
-  }),
-  getById: publicProcedure.input(
-    z.object({
-      id: z.number(),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-
-    const issue = await ctx.db.issue.findUnique({
-      where: {
-        id: input.id,
-      },
-    });
-    return issue;
   }),
   update: publicProcedure.input(
     z.object({
       id: z.number(),
-      title: z.string(),
       description: z.string(),
-      status: z.enum(['OPEN', 'CLOSED', 'IN_PROGRESS'])
     })
   )
   .mutation(async ({ ctx, input }) => {
 
-    const issue = await ctx.db.issue.update({
+   return await ctx.db.comment.update({
       where: {
         id: input.id,
       },
       data: {
-        title: input.title,
         description: input.description,
-        status: input.status
       }
     });
-    return issue;
   }),
 });
