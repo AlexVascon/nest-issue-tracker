@@ -1,12 +1,9 @@
 import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Link from "next/link";
-
-import { api } from "~/utils/api";
 import Dashboard from "./dashboard";
 
 export default function Home() {
-  const { data } = api.user.getAll.useQuery();
   const user = useUser();
 
   return (
