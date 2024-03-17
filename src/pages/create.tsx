@@ -34,7 +34,9 @@ export default function Create() {
         <input type="text" onChange={(e) => setTitle(e.target.value)} />
         <label>Description</label>
         <input type="text" id="description" onChange={(e) => setDescription(e.target.value)} />
-        <button type="submit">Submit</button>
+        <div className="submit-button">
+          <button type="submit">Submit</button>
+        </div>
       </form>
     </div>
     </>
