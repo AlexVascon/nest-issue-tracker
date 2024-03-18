@@ -16,3 +16,10 @@ input {
   border-radius: 5px;
   padding: 5px;
 }
+
+textarea {
+  border: 1px solid rgb(231, 222, 244);
+  border-radius: 5px;
+  padding: 5px;
+  height: 150px;
+}

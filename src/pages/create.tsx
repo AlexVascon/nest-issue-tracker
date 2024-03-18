@@ -37,7 +37,7 @@ const Create: NextPage = () => {
         <label>Title</label>
         <input type="text" onChange={(e) => setTitle(e.target.value)} />
         <label>Description</label>
-        <input type="text" id="description" onChange={(e) => setDescription(e.target.value)} />
+        <textarea id="description" onChange={(e) => setDescription(e.target.value)} />
         <div className="submit-button">
           <button type="submit">Submit</button>
         </div>

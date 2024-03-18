@@ -68,10 +68,10 @@ const IssuePage: NextPage = () => {
       </div>
       <form id="edit-form" onSubmit={handleSubmit}>
         <label>Title</label>
-        <input disabled={edit} type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input disabled={!edit} type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
         <label>Description</label>
-        <input disabled={edit} className="description" value={description} onChange={(e) => setDescription(e.target.value)}  />
-        <select disabled={edit} value={status} onChange={(e) => setStatus(e.target.value as STATUS)}>
+        <textarea disabled={!edit} value={description} onChange={(e) => setDescription(e.target.value)}  />
+        <select disabled={!edit} value={status} onChange={(e) => setStatus(e.target.value as STATUS)}>
           <option value={STATUS.OPEN}>OPEN</option>
           <option value={STATUS.IN_PROGRESS}>IN PROGRESS</option>
           <option value={STATUS.CLOSED}>CLOSED</option>
