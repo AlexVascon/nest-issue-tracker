@@ -51,7 +51,7 @@ const IssuePage: NextPage = () => {
   }
 
   useEffect(() => {
-    if(isDeleted) router.push('/dashboard');
+    if(isDeleted) void router.push('/dashboard');
   }, [isDeleted]);
 
   return (

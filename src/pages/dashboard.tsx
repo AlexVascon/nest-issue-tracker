@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { Issue } from "@prisma/client";
 
-enum STATUS{
+enum FILTER{
   OPEN = "OPEN",
   CLOSED = "CLOSED",
   IN_PROGRESS = "IN_PROGRESS",
@@ -15,7 +15,7 @@ enum STATUS{
 const Dashboard: NextPage = () => {
   const { data } = api.issue.getAll.useQuery();
 
-  const [status, setStatus] = useState(STATUS.OPEN);
+  const [status, setStatus] = useState<FILTER>(FILTER.OPEN);
   const [issues, setIssues] = useState(data);
   const [filterList, setFilterList] = useState<Issue[]>();
 
@@ -27,7 +27,7 @@ const Dashboard: NextPage = () => {
   }, [data]);
 
   useEffect(() => {
-    if(status === "ALL") {
+    if(status === FILTER.ALL) {
       setFilterList(issues);
       return;
     }
@@ -38,11 +38,11 @@ const Dashboard: NextPage = () => {
   return (
     <div className="page">
       <div className='options'>
-        <select value={status} onChange={(e) => setStatus(e.target.value as STATUS)}>
+        <select value={status} onChange={(e) => setStatus(e.target.value as FILTER)}>
           <option value={'ALL'}>ALL</option>
-          <option value={STATUS.OPEN}>OPEN</option>
-          <option value={STATUS.IN_PROGRESS}>IN PROGRESS</option>
-          <option value={STATUS.CLOSED}>CLOSED</option>
+          <option value={FILTER.OPEN}>OPEN</option>
+          <option value={FILTER.IN_PROGRESS}>IN PROGRESS</option>
+          <option value={FILTER.CLOSED}>CLOSED</option>
         </select>
         <Link href="/create">
         <button id="create-button">Create</button>
