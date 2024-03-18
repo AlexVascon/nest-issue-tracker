@@ -81,7 +81,7 @@ const IssuePage: NextPage = () => {
         </div>
       </form>
       <div id="comments">
-      <CreateComment issueId={issueId} authorId={authorId || ''} />
+      <CreateComment issueId={issueId} authorId={authorId ?? ''} />
       {issueComments && issueComments.data?.map((comment) => (
         <Comment key={comment.comment.id} {...comment}/>
       ))}

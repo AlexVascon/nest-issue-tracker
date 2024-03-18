@@ -18,7 +18,7 @@ const Create: NextPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    await createIssue.mutateAsync({description, title, authorId: authorId || ''});
+    await createIssue.mutateAsync({description, title, authorId: authorId ?? ''});
     setIsSubmitted(true);
   }
 

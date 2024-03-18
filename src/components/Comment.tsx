@@ -24,7 +24,7 @@ const Comment = (props: CommentWithUser) => {
 
     await deleteComment.mutateAsync({
       commentId: comment.id,
-      userId: user?.id || "",
+      userId: user?.id ?? "",
       authorId: author.id,
     })
   }
