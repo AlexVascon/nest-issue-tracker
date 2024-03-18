@@ -49,7 +49,6 @@ const Dashboard: NextPage = () => {
         </Link>
       </div>
     <table id="issues">
-
       <tr>
         <th>Issue</th>
         <th>Status</th>

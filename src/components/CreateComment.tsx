@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import {api } from "~/utils/api";
+import { mutate } from "swr"; 
 
 interface ICreateCommentProps {
   issueId: number;
@@ -14,6 +15,7 @@ const CreateComment = (props: ICreateCommentProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await createComment.mutateAsync({description, issueId, authorId});
+    mutate(`/api/issue/${issueId}`); 
   }
   return (
     <div id="create-comment">
