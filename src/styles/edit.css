@@ -91,3 +91,11 @@
   max-width: 700px;
   justify-content: right;
 }
+
+#delete-btn {
+  background-color: rgb(219, 77, 105);
+  border-radius: 5px;
+  padding: 5px 20px 5px 20px;
+  color: white;
+  margin-right: 10px;
+}

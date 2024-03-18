@@ -23,11 +23,13 @@ const IssuePage: NextPage = () => {
 
   const updateIssue = api.issue.update.useMutation();
   const issueComments = api.comment.getIssueComments.useQuery({issueId});
+  const deleteIssue = api.issue.delete.useMutation();
 
-  const [edit, setEdit] = useState<boolean>(false)
+  const [edit, setEdit] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [status, setStatus] = useState<STATUS>(STATUS.OPEN);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   useEffect(() => {
     if (data) {
@@ -42,6 +44,16 @@ const IssuePage: NextPage = () => {
     await updateIssue.mutateAsync({id: issueId, title, description, status});
   }
 
+  const handleDelete = async (e: FormEvent) => {
+    e.preventDefault();
+    await deleteIssue.mutateAsync({ issueId });
+    setIsDeleted(true);
+  }
+
+  useEffect(() => {
+    if(isDeleted) router.push('/dashboard');
+  }, [isDeleted]);
+
   return (
     <div className="page">
       <div className="back">
@@ -50,6 +62,7 @@ const IssuePage: NextPage = () => {
       </Link>
       </div>
       <div className="btns">
+        {!edit && <button id="delete-btn" onClick={handleDelete}>Delete</button>}
         {!edit && <button id="edit-btn" onClick={() => setEdit(!edit)}>Edit</button>}
         {edit && <button id="cancel-btn" onClick={() => setEdit(!edit)}>Cancel</button>}
       </div>

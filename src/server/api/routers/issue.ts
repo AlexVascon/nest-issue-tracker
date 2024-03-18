@@ -74,12 +74,18 @@ export const issueRouter = createTRPCRouter({
       issueId: z.number(),
     })
   )
-  .mutation(({ ctx, input }) => {
+  .mutation(async ({ ctx, input }) => {
 
-    ctx.db.issue.delete({
+    await ctx.db.issue.delete({
       where: {
         id: input.issueId
       }
-    })
+    });
+
+    await ctx.db.comment.deleteMany({
+      where: {
+        issueId: input.issueId
+      }
+    });
   }),
 });
