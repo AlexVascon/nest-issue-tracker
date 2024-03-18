@@ -54,3 +54,14 @@
   font-size: 12;
   color: rgb(111, 111, 111);
 }
+
+.bottom button {
+  color: rgb(159, 159, 159);
+  margin-right: 10px;
+}
+
+.test {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

@@ -102,10 +102,10 @@ export const commentRouter = createTRPCRouter({
       authorId: z.string()
     })
   )
-  .mutation(({ ctx, input }) => {
+  .mutation(async ({ ctx, input }) => {
     const {userId, authorId} = input;
     if(userId !== authorId) return;
-    ctx.db.comment.delete({
+    await ctx.db.comment.delete({
       where: {
         id: input.commentId
       }
