@@ -9,8 +9,11 @@ const Comment = (props: CommentWithUser) => {
   const { comment, author } = props;
   const { user } = useUser();
   const deleteComment = api.comment.delete.useMutation();
+  const updateComment = api.comment.update.useMutation();
 
   const [userIsAuthor, setUserIsAuthor] = useState<boolean>(false);
+  const [description, setDescription] = useState<string>(comment.description);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   useEffect(() => {
     if(author.id === user?.id) setUserIsAuthor(true);
@@ -24,6 +27,11 @@ const Comment = (props: CommentWithUser) => {
       userId: user?.id || "",
       authorId: author.id,
     })
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    await updateComment.mutateAsync({id: comment.id, description})
   }
   
   return (
@@ -43,9 +51,11 @@ const Comment = (props: CommentWithUser) => {
             <h3>{author.username}</h3>
             <p>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</p>
           </div>
-        <p>{comment.description}</p>
+        <textarea disabled={isEdit} onChange={(e) => setDescription(e.target.value)} value={comment.description}/>
         <div className="bottom">
+        {userIsAuthor && <button onClick={() => setIsEdit(true)}>Edit</button>}
         {userIsAuthor && <button onClick={handleDelete}>Delete</button>}
+        {isEdit && <button onClick={handleSubmit}>Submit</button>}
       </div>
       </div>
       </div>
