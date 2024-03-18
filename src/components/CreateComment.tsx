@@ -1,6 +1,5 @@
 import { useState, FormEvent } from "react";
 import {api } from "~/utils/api";
-import { mutate } from "swr"; 
 import { useRouter } from "next/router";
 
 interface ICreateCommentProps {
