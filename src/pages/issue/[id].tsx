@@ -42,6 +42,7 @@ const IssuePage: NextPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await updateIssue.mutateAsync({id: issueId, title, description, status});
+    router.reload();
   }
 
   const handleDelete = async (e: FormEvent) => {

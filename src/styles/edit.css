@@ -12,6 +12,9 @@
 
 #edit-form select {
   margin: 10px 0px 0px 0px;
+  padding: 5px 20px 5px 20px;
+  border-radius: 25px;
+  background-color: rgb(248, 244, 247);
 }
 
 #edit-form label {

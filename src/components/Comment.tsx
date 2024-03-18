@@ -51,7 +51,7 @@ const Comment = (props: CommentWithUser) => {
             <h3>{author.username}</h3>
             <p>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</p>
           </div>
-        <textarea disabled={isEdit} onChange={(e) => setDescription(e.target.value)} value={comment.description}/>
+        <textarea className="comment" disabled={isEdit} onChange={(e) => setDescription(e.target.value)} value={comment.description}/>
         <div className="bottom">
         {userIsAuthor && <button onClick={() => setIsEdit(true)}>Edit</button>}
         {userIsAuthor && <button onClick={handleDelete}>Delete</button>}
