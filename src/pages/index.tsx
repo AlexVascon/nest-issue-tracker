@@ -3,12 +3,15 @@ import Head from "next/head";
 import Dashboard from "./dashboard";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  if(isSignedIn) router.push("/dashboard");
+  useEffect(() => {
+    if(isSignedIn) router.push("/dashboard");
+  }, [isSignedIn])
 
   return (
     <>
