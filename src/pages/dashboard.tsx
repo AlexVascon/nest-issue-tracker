@@ -22,7 +22,7 @@ const Dashboard: NextPage = () => {
   useEffect(() => {
     if(data) {
       setIssues(data);
-      setFilterList(issues);
+      setFilterList(data);
     } 
   }, [data]);
 
@@ -33,7 +33,7 @@ const Dashboard: NextPage = () => {
     }
     const filteredList = issues?.filter((issue) => issue.status === status);
     setFilterList(filteredList);
-  }, [status]);
+  }, [status, issues]);
 
   return (
     <div className="page">
