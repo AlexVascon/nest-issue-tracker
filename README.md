@@ -2,9 +2,10 @@
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## What's next? How do I make an app with this?
+##stack
+NextJS, TRPC, Prisma, Postgres, Typescript, CSS, HTML
 
-This is a bug tracker. 
+##This is a bug tracker. 
 
 - create bugs
 - edit status [open, in progress, closed]
