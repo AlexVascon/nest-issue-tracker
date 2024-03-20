@@ -10,15 +10,17 @@ CreateT3, NextJS, TRPC, Prisma, Postgres, Typescript, Tailwind, Clerk, Vercel
 
 I built this to learn NextJS with CreatT3 and put it on my CV. This is a Full Stack issue tracker application. It's connected to a Postgres database and uses Clerk for authentication. The Authentication requires your github account. This application is hosted on Vercel which also hosts the database.
 
-# Note
+# Important !
 
-If you wish to run this application locally make sure correctly set all the env variables following the example env. You need to have Postgres installed.You will need to install node modules and run npx prisma db push to establish connection to the database and create neseccary tables.
+If you wish to run this application locally make sure correctly set all the env variables following the example env. You need to have Postgres installed.You will need to install node modules and run `npx prisma db push` to establish connection to the database and create neseccary tables.
 
 # Start locally
 
+```
 npm install
 npx prisma db push
 npm run dev
+```
 
 # Description
 
@@ -47,24 +49,24 @@ View by id
 
 # Models
 
-model Issue {
-id Int @id @default(autoincrement())
-title String @db.VarChar(255)
-description String @db.Text
-status Status @default(OPEN)
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-assignedToUserId String? @db.VarChar(255)
-authorId String
+model Issue {\
+id Int @id @default(autoincrement())\
+title String @db.VarChar(255)\
+description String @db.Text\
+status Status @default(OPEN)\
+createdAt DateTime @default(now())\
+updatedAt DateTime @updatedAt\
+assignedToUserId String? @db.VarChar(255)\
+authorId String\
 }
 
-model Comment {
-id Int @id @default(autoincrement())
-issueId Int
-description String
-createdAt DateTime @default(now())
-authorId String
-@@index([issueId])
+model Comment {\
+id Int @id @default(autoincrement())\
+issueId Int\
+description String\
+createdAt DateTime @default(now())\
+authorId String\
+@@index([issueId])\
 }
 
 # Comments
