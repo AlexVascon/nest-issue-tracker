@@ -1,8 +1,12 @@
-import Image from "next/image";
 import { RouterOutputs, api } from "~/utils/api";
-import dayjs from "dayjs";
 import { useUser } from "@clerk/nextjs";
 import { FormEvent, useEffect, useState } from "react";
+import { AvatarImage, AvatarFallback, Avatar } from "src/components/ui/avatar";
+import { Button } from "src/components/ui/button";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { Textarea } from "./ui/textarea";
+dayjs.extend(relativeTime);
 
 type CommentWithUser = RouterOutputs["comment"]["getIssueComments"][number];
 const Comment = (props: CommentWithUser) => {
@@ -16,8 +20,8 @@ const Comment = (props: CommentWithUser) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   useEffect(() => {
-    if(author.id === user?.id) setUserIsAuthor(true);
-  }, [userIsAuthor])
+    if (author.id === user?.id) setUserIsAuthor(true);
+  }, [userIsAuthor]);
 
   const handleDelete = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,41 +30,74 @@ const Comment = (props: CommentWithUser) => {
       commentId: comment.id,
       userId: user?.id ?? "",
       authorId: author.id,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await updateComment.mutateAsync({id: comment.id, description})
-  }
-  
+    await updateComment.mutateAsync({ id: comment.id, description });
+  };
+
   return (
-    <div id="comments-list">
-       <div className="card">
-        <div className='img'>
-        <Image
-        src={author.profileImageUrl}
-        className="h-14 w-14 rounded-full"
-        alt={`@${author.username}'s profile picture`}
-        width={56}
-        height={56}
-      />
-      </div>
-      <div className="test">
-         <div className="top">
-            <h3>{author.username}</h3>
-            <p>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</p>
+    <div className="grid gap-8">
+      <div className="flex items-start gap-5">
+        <Avatar className="mt-1.5 h-11 w-11 border">
+          <AvatarImage alt="@shadcn" src={author.profileImageUrl} />
+          <AvatarFallback>AC</AvatarFallback>
+        </Avatar>
+        <div className="grid w-full gap-1.5">
+          <div className="flex items-center gap-3">
+            <div className="font-semibold">{author.username}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              {dayjs(comment.createdAt).fromNow()}
+            </div>
           </div>
-        <textarea className="comment" disabled={isEdit} onChange={(e) => setDescription(e.target.value)} value={comment.description}/>
-        <div className="bottom">
-        {userIsAuthor && <button onClick={() => setIsEdit(true)}>Edit</button>}
-        {userIsAuthor && <button onClick={handleDelete}>Delete</button>}
-        {isEdit && <button onClick={handleSubmit}>Submit</button>}
-      </div>
-      </div>
+          <Textarea
+            disabled={!isEdit}
+            className="min-h-[50px] resize-none border-none"
+            id="description"
+            value={description}
+            placeholder="Enter the description"
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <div className="flex items-center gap-2 text-xs">
+            {userIsAuthor && (
+              <button
+                className="text-gray-500 underline"
+                onClick={() => setIsEdit(true)}
+              >
+                Edit
+              </button>
+            )}
+            {userIsAuthor && (
+              <button
+                className="text-gray-500 underline"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            )}
+            {isEdit && (
+              <button
+                className="text-gray-500 underline"
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+            )}
+            {isEdit && (
+              <button
+                className="text-gray-500 underline"
+                onClick={() => setIsEdit(false)}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default Comment;

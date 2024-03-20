@@ -1,11 +1,9 @@
 import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  const { isLoaded: userLoaded, isSignedIn } = useUser();
+  const { isSignedIn } = useUser();
 
   return (
     <>
@@ -15,10 +13,17 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        {isSignedIn ? <SignOutButton /> : <SignInButton afterSignInUrl="/dashboard" afterSignUpUrl="/dashboard"/>}  
+        {isSignedIn ? (
+          <SignOutButton />
+        ) : (
+          <SignInButton
+            afterSignInUrl="/dashboard"
+            afterSignUpUrl="/dashboard"
+          />
+        )}
       </main>
     </>
   );
-}
+};
 
 export default Home;

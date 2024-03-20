@@ -13,33 +13,6 @@
   flex-direction: row;
 }
 
-#create-comment {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-#create-comment label {
-  font-size: 15px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-#create-comment input {
-  font-size: 15px;
-  margin-bottom: 10px;
-  height: 150px;
-}
-
-#create-comment button {
-  background-color: rgb(150, 113, 171);
-  border-radius: 5px;
-  padding: 5px 20px 5px 20px;
-  color: white;
-  margin-right: 10px;
-}
-
 #comments-list {
   padding: 10px 0px 10px 0px;
   margin: 10px 0px 10px 0px;
@@ -69,10 +42,3 @@
   width: 100%;
 }
 
-.post {
-  background-color: rgb(150, 113, 171);
-  border-radius: 5px;
-  padding: 5px 20px 5px 20px;
-  color: white;
-  margin-right: 10px;
-}

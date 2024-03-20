@@ -1,17 +1,4 @@
-
-#create-button {
-  text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 25px;
-  padding-right: 25px;
-  margin-right: 5px;
-  background-color: #8e4ea5;
-  border-radius: 5px;
-  color: white;
-}
-
-#issues {
+#issue-list {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 90%;
@@ -22,14 +9,14 @@
   table-layout: fixed;
 }
 
-#issues td, th {
+#issue-list td, th {
   border: 1px solid #ddd;
   padding: 8px;
   padding-left: 8px;
   background-color: white;
 }
 
-#issues th {
+#issue-list th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
