@@ -16,10 +16,8 @@ const inter = Inter({
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ClerkProvider {...pageProps}>
-      <SignedIn>
-        <NavBar />
-        <Component {...pageProps} />
-      </SignedIn>
+      <NavBar />
+      <Component {...pageProps} />
     </ClerkProvider>
   );
 };
