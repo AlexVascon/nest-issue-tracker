@@ -2,9 +2,15 @@ import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const { isLoaded: userLoaded, isSignedIn } = useUser();
+
+  useEffect(() => {
+    if (userLoaded) void router.push("/dashboard");
+  }, [userLoaded]);
 
   return (
     <>
