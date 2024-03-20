@@ -1,10 +1,8 @@
-import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
 import Head from "next/head";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  const { isSignedIn } = useUser();
-
   return (
     <>
       <Head>
@@ -13,14 +11,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        {isSignedIn ? (
-          <SignOutButton />
-        ) : (
-          <SignInButton
-            afterSignInUrl="/dashboard"
-            afterSignUpUrl="/dashboard"
-          />
-        )}
+        <SignInButton afterSignInUrl="/dashboard" afterSignUpUrl="/dashboard" />
       </main>
     </>
   );
