@@ -1,6 +1,7 @@
 import { SignInButton } from "@clerk/nextjs";
 import Head from "next/head";
 import type { NextPage } from "next";
+import Dashboard from "./dashboard";
 
 const Home: NextPage = () => {
   return (
@@ -11,7 +12,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <SignInButton afterSignInUrl="/dashboard" afterSignUpUrl="/dashboard" />
+        <Dashboard />
       </main>
     </>
   );
