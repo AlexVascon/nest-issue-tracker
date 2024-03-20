@@ -1,9 +1,10 @@
 import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const { isSignedIn } = useUser();
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
   return (
     <>

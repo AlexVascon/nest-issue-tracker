@@ -5,7 +5,7 @@ import "~/styles/globals.css";
 import "~/styles/dashboard.css";
 import "~/styles/comment.css";
 import "~/styles/edit.css";
-import { ClerkProvider, SignedIn } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "~/components/NavBar";
 
 const inter = Inter({
