@@ -81,7 +81,7 @@ const Create: NextPage = () => {
               onChange={handleChange}
             />
           </div>
-          <Button size="lg" type="submit">
+          <Button size="lg" type="submit" className="mt-3">
             Submit new issue
           </Button>
           {isSubmitting && <LoadingSpinner />}

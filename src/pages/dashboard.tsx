@@ -72,7 +72,7 @@ const Dashboard: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col">
       {isLoading && <LoadingSpinner />}
-      <header className="border-b">
+      <header className="border-b shadow-sm shadow-slate-50">
         <div className="container flex h-14 items-center gap-4 px-4 lg:gap-8 lg:px-6">
           <div className="flex-1 font-semibold">Issues</div>
           <div className="flex items-center space-x-2">
@@ -109,7 +109,7 @@ const Dashboard: NextPage = () => {
           <div className="rounded-lg border">
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="shadow-sm shadow-slate-50">
                   <TableHead>Title</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Created</TableHead>

@@ -75,7 +75,7 @@ const IssuePage: NextPage = () => {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
-      {isLoading ? ( // Render loading spinner if data is loading
+      {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
@@ -127,7 +127,7 @@ const IssuePage: NextPage = () => {
               />
             </CardFooter>
             <CardFooter className="border-t pt-2.5">
-              <div className="grid grid-cols-2 items-center gap-4 text-sm">
+              <div className="grid grid-cols-2 items-center text-sm">
                 <span className="text-gray-500">Status</span>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
