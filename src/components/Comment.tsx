@@ -1,8 +1,9 @@
-import { RouterOutputs, api } from "~/utils/api";
+import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
 import { AvatarImage, AvatarFallback, Avatar } from "src/components/ui/avatar";
-import { Button } from "src/components/ui/button";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Textarea } from "./ui/textarea";

@@ -4,33 +4,39 @@ import { Textarea } from "src/components/ui/textarea";
 import { Button } from "src/components/ui/button";
 import type { NextPage } from "next";
 import { useUser } from "@clerk/nextjs";
-import { useState, FormEvent, useEffect } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "~/utils/api";
 
 const Create: NextPage = () => {
-  const user = useUser();
-  const authorId = user.user?.id;
+  const { user } = useUser();
+  const authorId = user?.id ?? "";
   const createIssue = api.issue.create.useMutation();
   const router = useRouter();
 
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [formData, setFormData] = useState({ title: "", description: "" });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!formData.title.trim() || !formData.description.trim()) {
+      alert("Please fill in all fields.");
+      return;
+    }
     await createIssue.mutateAsync({
-      description,
-      title,
-      authorId: authorId ?? "",
+      description: formData.description,
+      title: formData.title,
+      authorId,
     });
-    setIsSubmitted(true);
+    router.push("/dashboard", { scroll: false });
   };
-
-  useEffect(() => {
-    if (isSubmitted) router.push("/dashboard", { scroll: false });
-  }, [isSubmitted]);
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 px-4">
@@ -42,26 +48,32 @@ const Create: NextPage = () => {
         </p>
       </div>
       <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input
-            id="title"
-            placeholder="Enter the title"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            className="min-h-[200px] resize-none"
-            id="description"
-            placeholder="Enter the description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <Button size="lg" onClick={handleSubmit}>
-          Submit new issue
-        </Button>
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              name="title"
+              placeholder="Enter the title"
+              value={formData.title}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              className="min-h-[200px] resize-none"
+              id="description"
+              name="description"
+              placeholder="Enter the description"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </div>
+          <Button size="lg" type="submit">
+            Submit new issue
+          </Button>
+        </form>
       </div>
     </div>
   );

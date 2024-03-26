@@ -36,8 +36,8 @@ const Dashboard: NextPage = () => {
   const router = useRouter();
 
   const [status, setStatus] = useState<FILTER>(FILTER.ALL);
-  const [issues, setIssues] = useState(data);
-  const [filterList, setFilterList] = useState<Issue[]>();
+  const [issues, setIssues] = useState<Issue[]>([]);
+  const [filterList, setFilterList] = useState<Issue[]>([]);
 
   useEffect(() => {
     if (data) {
@@ -49,11 +49,24 @@ const Dashboard: NextPage = () => {
   useEffect(() => {
     if (status === FILTER.ALL) {
       setFilterList(issues);
-      return;
+    } else {
+      const filteredList = issues?.filter((issue) => issue.status === status);
+      setFilterList(filteredList);
     }
-    const filteredList = issues?.filter((issue) => issue.status === status);
-    setFilterList(filteredList);
   }, [status, issues]);
+
+  const getBadgeColor = (status: string) => {
+    switch (status) {
+      case "OPEN":
+        return "bg-green-500";
+      case "IN_PROGRESS":
+        return "bg-yellow-500";
+      case "CLOSED":
+        return "bg-red-500";
+      default:
+        return "";
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -69,24 +82,20 @@ const Dashboard: NextPage = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="min-w-[140px]">
-                <DropdownMenuItem onClick={() => setStatus(FILTER.OPEN)}>
-                  Open
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus(FILTER.IN_PROGRESS)}>
-                  In Progress
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus(FILTER.CLOSED)}>
-                  Closed
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus(FILTER.ALL)}>
-                  All
-                </DropdownMenuItem>
+                {Object.values(FILTER).map((filter) => (
+                  <DropdownMenuItem
+                    key={filter}
+                    onClick={() => setStatus(filter as FILTER)}
+                  >
+                    {filter}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <Link
-            className="flex items-center gap-2 text-sm font-medium"
             href="/create"
+            className="flex items-center gap-2 text-sm font-medium"
           >
             <PlusIcon className="h-4 w-4" />
             Create
@@ -94,7 +103,7 @@ const Dashboard: NextPage = () => {
         </div>
       </header>
       <main className="flex-1 py-6">
-        <div className="container flex flex-col gap-4 px-4 md:gap-8 lg:gap-12 lg:px-6">
+        <div className="container px-4 md:px-6">
           <div className="rounded-lg border">
             <Table>
               <TableHeader>
@@ -105,7 +114,7 @@ const Dashboard: NextPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filterList?.map((issue) => (
+                {filterList.map((issue) => (
                   <TableRow
                     key={issue.id}
                     onClick={() => router.push(`/issue/${issue.id}`)}
@@ -114,17 +123,9 @@ const Dashboard: NextPage = () => {
                       {issue.title}
                     </TableCell>
                     <TableCell>
-                      {issue.status === "OPEN" && (
-                        <Badge className={`bg-green-500`}>{issue.status}</Badge>
-                      )}
-                      {issue.status === "IN_PROGRESS" && (
-                        <Badge className={`bg-yellow-500`}>
-                          {issue.status}
-                        </Badge>
-                      )}
-                      {issue.status === "CLOSED" && (
-                        <Badge className={`bg-red-500`}>{issue.status}</Badge>
-                      )}
+                      <Badge className={getBadgeColor(issue.status)}>
+                        {issue.status}
+                      </Badge>
                     </TableCell>
                     <TableCell>{dayjs(issue.createdAt).fromNow()}</TableCell>
                   </TableRow>

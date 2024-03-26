@@ -1,4 +1,5 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { CardContent, CardFooter, Card } from "src/components/ui/card";
