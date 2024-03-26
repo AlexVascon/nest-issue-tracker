@@ -8,6 +8,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "~/utils/api";
+import LoadingSpinner from "~/components/LoadingSpinner";
 
 const Create: NextPage = () => {
   const { user } = useUser();
@@ -16,6 +17,7 @@ const Create: NextPage = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({ title: "", description: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -30,12 +32,21 @@ const Create: NextPage = () => {
       alert("Please fill in all fields.");
       return;
     }
-    await createIssue.mutateAsync({
-      description: formData.description,
-      title: formData.title,
-      authorId,
-    });
-    router.push("/dashboard", { scroll: false });
+
+    setIsSubmitting(true);
+    try {
+      await createIssue.mutateAsync({
+        description: formData.description,
+        title: formData.title,
+        authorId,
+      });
+
+      router.push("/dashboard", { scroll: false });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -73,6 +84,7 @@ const Create: NextPage = () => {
           <Button size="lg" type="submit">
             Submit new issue
           </Button>
+          {isSubmitting && <LoadingSpinner />}
         </form>
       </div>
     </div>

@@ -18,6 +18,7 @@ import {
 } from "src/components/ui/dropdown-menu";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import LoadingSpinner from "~/components/LoadingSpinner"; // Import your loading spinner component here
 dayjs.extend(relativeTime);
 
 enum STATUS {
@@ -32,7 +33,7 @@ const IssuePage: NextPage = () => {
 
   const router = useRouter();
   const issueId = Number(router.query.id);
-  const { data } = api.issue.getById.useQuery({ id: issueId });
+  const { data, isLoading } = api.issue.getById.useQuery({ id: issueId }); // Track loading state
 
   const updateIssue = api.issue.update.useMutation();
   const issueComments = api.comment.getIssueComments.useQuery({ issueId });
@@ -74,101 +75,118 @@ const IssuePage: NextPage = () => {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
-      <div className="flex justify-end space-x-2">
-        {!edit && (
-          <Button className="bg-red-400" onClick={handleDelete}>
-            Delete
-          </Button>
-        )}
-        {!edit && (
-          <Button className="bg-blue-400" onClick={() => setEdit(!edit)}>
-            Edit
-          </Button>
-        )}
-        {edit && (
-          <Button className="bg-red-400" onClick={() => setEdit(!edit)}>
-            Cancel
-          </Button>
-        )}
-      </div>
-      {!edit ? (
-        <h1 className="text-3xl font-bold">{title}</h1>
+      {isLoading ? ( // Render loading spinner if data is loading
+        <LoadingSpinner />
       ) : (
-        <Input
-          value={title}
-          id="title"
-          placeholder="Enter the title"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      )}
-      <p className="text-sm font-medium uppercase leading-none tracking-wide text-gray-500">
-        Issue # {id}
-      </p>
-      <Card>
-        <CardFooter className="pt-5">
-          <p className="text-sm leading-none tracking-wide text-gray-500">
-            {dayjs(created).fromNow()}
-          </p>
-        </CardFooter>
-        <CardFooter className="flex-col items-start border-t">
-          <h2 className="pt-2 text-lg font-bold">Description</h2>
-          <Textarea
-            disabled={!edit}
-            className="min-h-[200px] resize-none border-none"
-            id="description"
-            value={description}
-            placeholder="Enter the description"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </CardFooter>
-        <CardFooter className="border-t pt-2.5">
-          <div className="grid grid-cols-2 items-center gap-4 text-sm">
-            <span className="text-gray-500">Status</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                {status === STATUS.OPEN ? (
-                  <Button className="w-[140px] bg-lime-300" variant="outline">
-                    Open
-                  </Button>
-                ) : status === STATUS.IN_PROGRESS ? (
-                  <Button className="w-[140px] bg-yellow-300" variant="outline">
-                    In progress
-                  </Button>
-                ) : (
-                  <Button className="w-[140px] bg-red-300" variant="outline">
-                    Closed
-                  </Button>
-                )}
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="min-w-[140px]">
-                <DropdownMenuItem onClick={() => setStatus(STATUS.OPEN)}>
-                  Open
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus(STATUS.IN_PROGRESS)}>
-                  In Progress
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatus(STATUS.CLOSED)}>
-                  Closed
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </CardFooter>
-        {edit && (
-          <CardFooter className=" border-t">
-            <div className="flex justify-end pt-5">
-              <Button className="bg-purple-400" onClick={handleSubmit}>
-                Submit
+        <>
+          <div className="flex justify-end space-x-2">
+            {!edit && (
+              <Button className="bg-red-400" onClick={handleDelete}>
+                Delete
               </Button>
-            </div>
-          </CardFooter>
-        )}
-      </Card>
-      <CreateComment issueId={issueId} authorId={authorId ?? ""} />
-      {issueComments &&
-        issueComments.data?.map((comment) => (
-          <Comment key={comment.comment.id} {...comment} />
-        ))}
+            )}
+            {!edit && (
+              <Button className="bg-blue-400" onClick={() => setEdit(!edit)}>
+                Edit
+              </Button>
+            )}
+            {edit && (
+              <Button className="bg-red-400" onClick={() => setEdit(!edit)}>
+                Cancel
+              </Button>
+            )}
+          </div>
+          {!edit ? (
+            <h1 className="text-3xl font-bold">{title}</h1>
+          ) : (
+            <Input
+              value={title}
+              id="title"
+              placeholder="Enter the title"
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          )}
+          <p className="text-sm font-medium uppercase leading-none tracking-wide text-gray-500">
+            Issue # {id}
+          </p>
+          <Card>
+            <CardFooter className="pt-5">
+              <p className="text-sm leading-none tracking-wide text-gray-500">
+                {dayjs(created).fromNow()}
+              </p>
+            </CardFooter>
+            <CardFooter className="flex-col items-start border-t">
+              <h2 className="pt-2 text-lg font-bold">Description</h2>
+              <Textarea
+                disabled={!edit}
+                className="min-h-[200px] resize-none border-none"
+                id="description"
+                value={description}
+                placeholder="Enter the description"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </CardFooter>
+            <CardFooter className="border-t pt-2.5">
+              <div className="grid grid-cols-2 items-center gap-4 text-sm">
+                <span className="text-gray-500">Status</span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    {status === STATUS.OPEN ? (
+                      <Button
+                        className="w-[140px] bg-lime-300"
+                        variant="outline"
+                      >
+                        Open
+                      </Button>
+                    ) : status === STATUS.IN_PROGRESS ? (
+                      <Button
+                        className="w-[140px] bg-yellow-300"
+                        variant="outline"
+                      >
+                        In progress
+                      </Button>
+                    ) : (
+                      <Button
+                        className="w-[140px] bg-red-300"
+                        variant="outline"
+                      >
+                        Closed
+                      </Button>
+                    )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="min-w-[140px]">
+                    <DropdownMenuItem onClick={() => setStatus(STATUS.OPEN)}>
+                      Open
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setStatus(STATUS.IN_PROGRESS)}
+                    >
+                      In Progress
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatus(STATUS.CLOSED)}>
+                      Closed
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </CardFooter>
+            {edit && (
+              <CardFooter className=" border-t">
+                <div className="flex justify-end pt-5">
+                  <Button className="bg-purple-400" onClick={handleSubmit}>
+                    Submit
+                  </Button>
+                </div>
+              </CardFooter>
+            )}
+          </Card>
+          <CreateComment issueId={issueId} authorId={authorId ?? ""} />
+          {issueComments &&
+            issueComments.data?.map((comment) => (
+              <Comment key={comment.comment.id} {...comment} />
+            ))}
+        </>
+      )}
     </div>
   );
 };

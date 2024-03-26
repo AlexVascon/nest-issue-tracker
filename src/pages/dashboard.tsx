@@ -22,6 +22,7 @@ import type { Issue } from "@prisma/client";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useRouter } from "next/router";
+import LoadingSpinner from "~/components/LoadingSpinner";
 dayjs.extend(relativeTime);
 
 enum FILTER {
@@ -32,7 +33,7 @@ enum FILTER {
 }
 
 const Dashboard: NextPage = () => {
-  const { data } = api.issue.getAll.useQuery();
+  const { data, isLoading } = api.issue.getAll.useQuery();
   const router = useRouter();
 
   const [status, setStatus] = useState<FILTER>(FILTER.ALL);
@@ -70,6 +71,7 @@ const Dashboard: NextPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {isLoading && <LoadingSpinner />}
       <header className="border-b">
         <div className="container flex h-14 items-center gap-4 px-4 lg:gap-8 lg:px-6">
           <div className="flex-1 font-semibold">Issues</div>
