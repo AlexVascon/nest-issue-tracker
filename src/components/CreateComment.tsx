@@ -25,21 +25,20 @@ const CreateComment = (props: ICreateCommentProps) => {
   };
 
   return (
-    <Card>
-      <CardContent className="space-y-4">
-        <div className="space-y-2 pt-2">
-          <Label className="sm:translate-y-2" htmlFor="comment">
-            <span>Your Comment</span>
-          </Label>
-          <Textarea
-            className="min-h-[150px] resize-none"
-            id="comment"
-            placeholder="Enter your comment"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-      </CardContent>
-      <CardFooter>
+    <Card className="shadow-md shadow-stone-200">
+      <CardFooter className="items-center py-2">
+        <span>Write Comment</span>
+      </CardFooter>
+      <CardFooter className="items-center border-t py-2">
+        <Textarea
+          className="min-h-[150px] resize-none border-none border-input bg-transparent px-3 py-2 text-sm outline-none ring-offset-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent disabled:opacity-0"
+          id="comment"
+          placeholder="Enter your comment"
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </CardFooter>
+      <CardContent className="space-y-4"></CardContent>
+      <CardFooter className="items-center justify-end border-t py-2">
         <Button onClick={handleSubmit}>Post Comment</Button>
       </CardFooter>
     </Card>

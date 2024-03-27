@@ -4,7 +4,7 @@ import { SignOutButton } from "@clerk/nextjs";
 
 const NavBar = () => {
   return (
-    <div className="flex h-12 items-center border-b px-4">
+    <div className="flex h-12 items-center border-b px-4 shadow-md shadow-stone-200">
       <Link
         className="inline-flex items-center space-x-2 text-sm font-medium"
         href="/dashboard"
@@ -14,7 +14,7 @@ const NavBar = () => {
       </Link>
       <div className="ml-auto flex items-center space-x-4">
         <SignOutButton>
-          <Button size="sm" variant="outline">
+          <Button size="sm" variant="outline" className="border-none">
             Sign out
           </Button>
         </SignOutButton>

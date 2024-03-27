@@ -19,6 +19,7 @@ import {
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import LoadingSpinner from "~/components/LoadingSpinner"; // Import your loading spinner component here
+import { Badge } from "~/components/ui/badge";
 dayjs.extend(relativeTime);
 
 enum STATUS {
@@ -73,110 +74,104 @@ const IssuePage: NextPage = () => {
     if (isDeleted) void router.push("/dashboard");
   }, [isDeleted]);
 
+  const getBadgeColor = (status: string) => {
+    switch (status) {
+      case "OPEN":
+        return "bg-green-400";
+      case "IN_PROGRESS":
+        return "bg-yellow-400";
+      case "CLOSED":
+        return "bg-red-400";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
+    <div className="mx-auto mb-20 max-w-2xl space-y-4 px-2 py-2">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
-          <div className="flex justify-end space-x-2">
+          <div className="flex justify-end space-x-2 py-2">
+            {!edit && <Button onClick={handleDelete}>Delete</Button>}
             {!edit && (
-              <Button className="bg-red-400" onClick={handleDelete}>
-                Delete
-              </Button>
-            )}
-            {!edit && (
-              <Button className="bg-blue-400" onClick={() => setEdit(!edit)}>
+              <Button variant="outline" onClick={() => setEdit(!edit)}>
                 Edit
               </Button>
             )}
-            {edit && (
-              <Button className="bg-red-400" onClick={() => setEdit(!edit)}>
-                Cancel
-              </Button>
-            )}
+            {edit && <Button onClick={() => setEdit(!edit)}>Cancel</Button>}
           </div>
-          {!edit ? (
-            <h1 className="text-3xl font-bold">{title}</h1>
-          ) : (
-            <Input
-              value={title}
-              id="title"
-              placeholder="Enter the title"
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          )}
-          <p className="text-sm font-medium uppercase leading-none tracking-wide text-gray-500">
-            Issue # {id}
-          </p>
-          <Card>
-            <CardFooter className="pt-5">
-              <p className="text-sm leading-none tracking-wide text-gray-500">
-                {dayjs(created).fromNow()}
-              </p>
+          <span className="flex justify-between py-1">
+            <p className=" text-sm leading-none tracking-wide text-gray-500">
+              Created {dayjs(created).fromNow()}
+            </p>
+            <p className="py-0 text-sm leading-none tracking-wide text-gray-500">
+              {dayjs(created).format("DD/MM/YYYY")}
+            </p>
+          </span>
+          <Card className="shadow-md shadow-stone-200">
+            <CardFooter className="py-2">
+              {!edit ? (
+                <h1 className="py-0 text-3xl font-bold">{title}</h1>
+              ) : (
+                <Input
+                  value={title}
+                  id="title"
+                  placeholder="Enter the title"
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="border-none border-input bg-transparent px-3 py-2 text-sm ring-offset-transparent file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent"
+                />
+              )}
             </CardFooter>
-            <CardFooter className="flex-col items-start border-t">
-              <h2 className="pt-2 text-lg font-bold">Description</h2>
+            <CardFooter className="flex-col items-center border-t">
               <Textarea
                 disabled={!edit}
-                className="min-h-[200px] resize-none border-none"
+                className="min-h-[200px] resize-none border-none border-none border-input bg-transparent px-3 py-2 text-sm outline-none ring-offset-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent"
                 id="description"
                 value={description}
                 placeholder="Enter the description"
                 onChange={(e) => setDescription(e.target.value)}
               />
             </CardFooter>
-            <CardFooter className="border-t pt-2.5">
-              <div className="grid grid-cols-2 items-center text-sm">
+            <CardFooter className="justify-between border-t py-2">
+              <div className="flex w-full items-center justify-between">
                 <span className="text-gray-500">Status</span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    {status === STATUS.OPEN ? (
+                {!edit && (
+                  <Badge className={`${getBadgeColor(status)} text-center`}>
+                    {status}
+                  </Badge>
+                )}
+                {edit && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
                       <Button
-                        className="w-[140px] bg-lime-300"
+                        className="w-[140px] justify-between"
                         variant="outline"
                       >
-                        Open
+                        {status}
+                        <ChevronDownIcon className="h-4 w-4 -translate-y-0.5" />
                       </Button>
-                    ) : status === STATUS.IN_PROGRESS ? (
-                      <Button
-                        className="w-[140px] bg-yellow-300"
-                        variant="outline"
-                      >
-                        In progress
-                      </Button>
-                    ) : (
-                      <Button
-                        className="w-[140px] bg-red-300"
-                        variant="outline"
-                      >
-                        Closed
-                      </Button>
-                    )}
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="min-w-[140px]">
-                    <DropdownMenuItem onClick={() => setStatus(STATUS.OPEN)}>
-                      Open
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setStatus(STATUS.IN_PROGRESS)}
-                    >
-                      In Progress
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setStatus(STATUS.CLOSED)}>
-                      Closed
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="min-w-[140px]">
+                      {Object.values(STATUS).map((status) => (
+                        <DropdownMenuItem
+                          key={status}
+                          onClick={() => setStatus(status)}
+                        >
+                          {status}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
             </CardFooter>
             {edit && (
-              <CardFooter className=" border-t">
-                <div className="flex justify-end pt-5">
-                  <Button className="bg-purple-400" onClick={handleSubmit}>
-                    Submit
-                  </Button>
-                </div>
+              <CardFooter className="items-center justify-end border-t py-2">
+                <Button className="w-full" onClick={handleSubmit}>
+                  Submit
+                </Button>
               </CardFooter>
             )}
           </Card>
@@ -190,5 +185,24 @@ const IssuePage: NextPage = () => {
     </div>
   );
 };
+
+function ChevronDownIcon(props: Record<string, unknown>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
 
 export default IssuePage;

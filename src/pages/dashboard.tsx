@@ -59,11 +59,11 @@ const Dashboard: NextPage = () => {
   const getBadgeColor = (status: string) => {
     switch (status) {
       case "OPEN":
-        return "bg-green-500";
+        return "bg-green-400";
       case "IN_PROGRESS":
-        return "bg-yellow-500";
+        return "bg-yellow-400";
       case "CLOSED":
-        return "bg-red-500";
+        return "bg-red-400";
       default:
         return "";
     }
@@ -72,9 +72,8 @@ const Dashboard: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col">
       {isLoading && <LoadingSpinner />}
-      <header className="border-b shadow-sm shadow-slate-50">
-        <div className="container flex h-14 items-center gap-4 px-4 lg:gap-8 lg:px-6">
-          <div className="flex-1 font-semibold">Issues</div>
+      <header>
+        <div className="container flex h-14 items-center justify-end gap-4 px-4 pt-6 lg:gap-8 lg:px-6">
           <div className="flex items-center space-x-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -106,11 +105,11 @@ const Dashboard: NextPage = () => {
       </header>
       <main className="flex-1 py-6">
         <div className="container px-4 md:px-6">
-          <div className="rounded-lg border">
+          <div className="rounded-lg border shadow-md shadow-stone-200">
             <Table>
               <TableHeader>
-                <TableRow className="shadow-sm shadow-slate-50">
-                  <TableHead>Title</TableHead>
+                <TableRow className="shadow-md shadow-stone-200">
+                  <TableHead className="w-3/5">Title</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Created</TableHead>
                 </TableRow>
@@ -125,7 +124,9 @@ const Dashboard: NextPage = () => {
                       {issue.title}
                     </TableCell>
                     <TableCell>
-                      <Badge className={getBadgeColor(issue.status)}>
+                      <Badge
+                        className={`${getBadgeColor(issue.status)} w-[120px] text-center`}
+                      >
                         {issue.status}
                       </Badge>
                     </TableCell>

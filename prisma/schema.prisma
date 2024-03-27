@@ -36,3 +36,4 @@ model Comment {
   authorId      String
   @@index([issueId])
 }
+
