@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useRouter } from "next/router";
 import LoadingSpinner from "~/components/LoadingSpinner";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 dayjs.extend(relativeTime);
 
 enum FILTER {
@@ -64,6 +65,19 @@ const Dashboard: NextPage = () => {
         return "bg-yellow-400";
       case "CLOSED":
         return "bg-red-400";
+      default:
+        return "";
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "LOW":
+        return "bg-blue-400";
+      case "MEDIUM":
+        return "bg-yellow-400";
+      case "HIGH":
+        return "bg-orange-400";
       default:
         return "";
     }
@@ -111,7 +125,9 @@ const Dashboard: NextPage = () => {
                 <TableRow className="shadow-md shadow-stone-200">
                   <TableHead className="w-3/5">Title</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Priority</TableHead>
                   <TableHead>Created</TableHead>
+                  <TableHead>Assigned</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -130,7 +146,21 @@ const Dashboard: NextPage = () => {
                         {issue.status}
                       </Badge>
                     </TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${getPriorityColor(issue.priority)} w-[120px] text-center`}
+                      >
+                        {issue.priority}
+                      </Badge>
+                    </TableCell>
                     <TableCell>{dayjs(issue.createdAt).fromNow()}</TableCell>
+                    <TableCell>
+                      <Avatar className="mt-1.5 h-11 w-11 border">
+                        <AvatarImage alt="@shadcn" src={issue.assignedImage} />
+                        <AvatarFallback>AC</AvatarFallback>
+                      </Avatar>
+                      {issue.assignedUsername}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -3,7 +3,6 @@ import type { FormEvent } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { CardContent, CardFooter, Card } from "src/components/ui/card";
-import { Label } from "src/components/ui/label";
 import { Textarea } from "src/components/ui/textarea";
 import { Button } from "src/components/ui/button";
 

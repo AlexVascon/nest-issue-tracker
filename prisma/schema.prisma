@@ -18,8 +18,16 @@ model Issue {
   status           Status   @default(OPEN)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  assignedToUserId String?  @db.VarChar(255)
+  priority         Priority @default(LOW)
+  assignedUsername String?  @db.VarChar(255)
+  assignedImage    String 
   authorId         String
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
 }
 
 enum Status {

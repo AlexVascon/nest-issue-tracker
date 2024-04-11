@@ -7,8 +7,16 @@ import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "~/utils/api";
+import { Priority } from "@prisma/client";
 import LoadingSpinner from "~/components/LoadingSpinner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { ChevronDownIcon } from "lucide-react";
+import { api } from "~/utils/api";
 
 const Create: NextPage = () => {
   const { user } = useUser();
@@ -17,7 +25,10 @@ const Create: NextPage = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({ title: "", description: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [title, setTile] = useState<string>("");
+  const [description, setDescriptipon] = useState<string>("");
+  const [priority, setPriority] = useState<Priority>(Priority.LOW);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -81,9 +92,32 @@ const Create: NextPage = () => {
               onChange={handleChange}
             />
           </div>
-          <Button size="lg" type="submit" className="mt-3">
-            Submit new issue
-          </Button>
+          <div className="flex items-center justify-between space-y-2">
+            <span>Priority</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="w-[140px] justify-between" variant="outline">
+                  {priority}
+                  <ChevronDownIcon className="h-4 w-4 -translate-y-0.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="min-w-[140px]">
+                {Object.values(Priority).map((priority) => (
+                  <DropdownMenuItem
+                    key={priority}
+                    onClick={() => setPriority(priority as Priority)}
+                  >
+                    {priority}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="flex items-center justify-end">
+            <Button size="lg" type="submit" className="mt-3">
+              Submit new issue
+            </Button>
+          </div>
           {isSubmitting && <LoadingSpinner />}
         </form>
       </div>

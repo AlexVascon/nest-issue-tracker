@@ -1,4 +1,4 @@
-import { SignOutButton, SignInButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";

@@ -127,7 +127,7 @@ const IssuePage: NextPage = () => {
             <CardFooter className="flex-col items-center border-t">
               <Textarea
                 disabled={!edit}
-                className="min-h-[200px] resize-none border-none border-none border-input bg-transparent px-3 py-2 text-sm outline-none ring-offset-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent"
+                className="min-h-[200px] resize-none border-none border-input bg-transparent px-3 py-2 text-sm outline-none ring-offset-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent"
                 id="description"
                 value={description}
                 placeholder="Enter the description"
