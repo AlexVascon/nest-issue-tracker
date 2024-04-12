@@ -74,3 +74,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ql-editor{
+  min-height:250px;
+}
+
+.ql-snow {
+  min-width: 655px;
+}

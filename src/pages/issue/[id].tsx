@@ -22,6 +22,9 @@ import LoadingSpinner from "~/components/LoadingSpinner"; // Import your loading
 import { Badge } from "~/components/ui/badge";
 import { Priority } from "@prisma/client";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 dayjs.extend(relativeTime);
 
 enum STATUS {
@@ -174,15 +177,23 @@ const IssuePage: NextPage = () => {
                 />
               )}
             </CardFooter>
-            <CardFooter className="flex-col items-center border-t">
-              <Textarea
-                disabled={!edit}
-                className="min-h-[200px] resize-none border-none border-input bg-transparent px-3 py-2 text-sm outline-none ring-offset-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent"
-                id="description"
-                value={description}
-                placeholder="Enter the description"
-                onChange={(e) => setDescription(e.target.value)}
-              />
+            <CardFooter className="m-0 w-full flex-col border-t p-0">
+              {!edit && (
+                <Textarea
+                  disabled
+                  className="min-h-[200px] resize-none border-none border-input bg-transparent px-3 py-2 text-sm outline-none ring-offset-transparent placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent focus-visible:ring-transparent focus-visible:ring-offset-transparent"
+                  id="description"
+                  value={description}
+                  placeholder="Enter the description"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              )}
+              {edit && (
+                <ReactQuill
+                  value={description}
+                  onChange={(value) => setDescription(value)}
+                />
+              )}
             </CardFooter>
             <CardFooter className="justify-between border-t py-2">
               <div className="flex w-full items-center justify-between">

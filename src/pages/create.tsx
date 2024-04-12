@@ -1,6 +1,5 @@
 import { Label } from "src/components/ui/label";
 import { Input } from "src/components/ui/input";
-import { Textarea } from "src/components/ui/textarea";
 import { Button } from "src/components/ui/button";
 import type { NextPage } from "next";
 import { useUser } from "@clerk/nextjs";
@@ -11,6 +10,9 @@ import { Priority } from "@prisma/client";
 import LoadingSpinner from "~/components/LoadingSpinner";
 import { api } from "~/utils/api";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
 const Create: NextPage = () => {
   const { user } = useUser();
@@ -19,7 +21,7 @@ const Create: NextPage = () => {
   const router = useRouter();
 
   const [title, setTile] = useState<string>("");
-  const [description, setDescriptipon] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [priority, setPriority] = useState<Priority>(Priority.LOW);
   const [username, setUsername] = useState("");
   const [assigned, setAssigned] = useState("");
@@ -81,14 +83,12 @@ const Create: NextPage = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea
-              className="min-h-[200px] resize-none"
-              id="description"
-              name="description"
-              placeholder="Enter the description"
-              value={description}
-              onChange={(e) => setDescriptipon(e.target.value)}
-            />
+            {typeof window !== "undefined" && (
+              <ReactQuill
+                value={description}
+                onChange={(value) => setDescription(value)}
+              />
+            )}
           </div>
           <div className="mt-2 flex items-center justify-between space-y-2">
             <span>Priority</span>
