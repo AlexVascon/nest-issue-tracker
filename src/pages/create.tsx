@@ -9,14 +9,8 @@ import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Priority } from "@prisma/client";
 import LoadingSpinner from "~/components/LoadingSpinner";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { ChevronDownIcon } from "lucide-react";
 import { api } from "~/utils/api";
+import Image from "next/image";
 
 const Create: NextPage = () => {
   const { user } = useUser();
@@ -24,31 +18,30 @@ const Create: NextPage = () => {
   const createIssue = api.issue.create.useMutation();
   const router = useRouter();
 
-  const [formData, setFormData] = useState({ title: "", description: "" });
   const [title, setTile] = useState<string>("");
   const [description, setDescriptipon] = useState<string>("");
   const [priority, setPriority] = useState<Priority>(Priority.LOW);
+  const [username, setUsername] = useState("");
+  const [assigned, setAssigned] = useState("");
+  const [image, setImage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showDataList, setShowDataList] = useState<boolean>(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { data } = api.user.assign.useQuery({
+    username,
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim() || !formData.description.trim()) {
-      alert("Please fill in all fields.");
-      return;
-    }
 
     setIsSubmitting(true);
     try {
       await createIssue.mutateAsync({
-        description: formData.description,
-        title: formData.title,
+        description,
+        title,
+        priority,
+        assigned,
+        image,
         authorId,
       });
 
@@ -58,6 +51,11 @@ const Create: NextPage = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleAssignChange = (username: string, image: string) => {
+    setAssigned(username);
+    setImage(image);
   };
 
   return (
@@ -77,8 +75,8 @@ const Create: NextPage = () => {
               id="title"
               name="title"
               placeholder="Enter the title"
-              value={formData.title}
-              onChange={handleChange}
+              value={title}
+              onChange={(e) => setTile(e.target.value)}
             />
           </div>
           <div className="space-y-2">
@@ -88,33 +86,85 @@ const Create: NextPage = () => {
               id="description"
               name="description"
               placeholder="Enter the description"
-              value={formData.description}
-              onChange={handleChange}
+              value={description}
+              onChange={(e) => setDescriptipon(e.target.value)}
             />
           </div>
-          <div className="flex items-center justify-between space-y-2">
+          <div className="mt-2 flex items-center justify-between space-y-2">
             <span>Priority</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="w-[140px] justify-between" variant="outline">
-                  {priority}
-                  <ChevronDownIcon className="h-4 w-4 -translate-y-0.5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="min-w-[140px]">
-                {Object.values(Priority).map((priority) => (
-                  <DropdownMenuItem
-                    key={priority}
-                    onClick={() => setPriority(priority as Priority)}
-                  >
-                    {priority}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div>
+              <input
+                className="m-2 h-5 w-5 bg-blue-500 text-blue-500"
+                type="radio"
+                value={Priority.LOW}
+                onChange={() => setPriority(Priority.LOW)}
+              />
+              <input
+                type="radio"
+                className="m-2 h-5 w-5 bg-purple-500 text-purple-500"
+                value={Priority.MEDIUM}
+                onChange={() => setPriority(Priority.MEDIUM)}
+              />
+              <input
+                type="radio"
+                className="m-2 h-5 w-5 bg-orange-500 text-orange-500"
+                value={Priority.HIGH}
+                onChange={() => setPriority(Priority.HIGH)}
+              />
+            </div>
           </div>
-          <div className="flex items-center justify-end">
-            <Button size="lg" type="submit" className="mt-3">
+          <div className="relative mt-2 flex flex-row items-center justify-between">
+            <div className="flex ">
+              <span>Assign</span>
+              {!assigned && (
+                <span className="pl-2 text-gray-400">Unassigned</span>
+              )}
+              {assigned && (
+                <div>
+                  <Image
+                    src={image ?? ""}
+                    width={30}
+                    height={30}
+                    alt="Avatar"
+                    className="h-20 w-20 rounded-full object-cover"
+                  />
+                  <span className="pl-2">{assigned}</span>
+                </div>
+              )}
+            </div>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              onFocus={() => setShowDataList(true)}
+              onBlur={() => setShowDataList(false)}
+              className="search rounded-full  px-1 py-1"
+            />
+            {showDataList && (
+              <ul className="search absolute top-full z-50 mt-1 w-full bg-white shadow-md">
+                {data?.map((user) => (
+                  <li
+                    key={user.id}
+                    className="flex flex-row px-4 py-2 hover:bg-gray-100"
+                    onClick={() =>
+                      handleAssignChange(user.username, user.img_url)
+                    }
+                  >
+                    <Image
+                      src={user.img_url ?? ""}
+                      width={30}
+                      height={30}
+                      alt="Avatar"
+                      className="h-20 w-20 rounded-full object-cover"
+                    />
+                    {user.username}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="flex w-full items-center">
+            <Button size="lg" type="submit" className="mt-3 w-full">
               Submit new issue
             </Button>
           </div>

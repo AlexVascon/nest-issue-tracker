@@ -20,6 +20,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import LoadingSpinner from "~/components/LoadingSpinner"; // Import your loading spinner component here
 import { Badge } from "~/components/ui/badge";
+import { Priority } from "@prisma/client";
+import Image from "next/image";
 dayjs.extend(relativeTime);
 
 enum STATUS {
@@ -34,7 +36,7 @@ const IssuePage: NextPage = () => {
 
   const router = useRouter();
   const issueId = Number(router.query.id);
-  const { data, isLoading } = api.issue.getById.useQuery({ id: issueId }); // Track loading state
+  const { data, isLoading } = api.issue.getById.useQuery({ id: issueId });
 
   const updateIssue = api.issue.update.useMutation();
   const issueComments = api.comment.getIssueComments.useQuery({ issueId });
@@ -45,8 +47,17 @@ const IssuePage: NextPage = () => {
   const [description, setDescription] = useState<string>("");
   const [status, setStatus] = useState<STATUS>(STATUS.OPEN);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [priority, setPriority] = useState<Priority>(Priority.LOW);
   const [id, setID] = useState<number>();
   const [created, setCreated] = useState<Date>();
+  const [username, setUsername] = useState("");
+  const [assigned, setAssigned] = useState("");
+  const [image, setImage] = useState("");
+  const [showDataList, setShowDataList] = useState<boolean>(false);
+
+  const resp = api.user.assign.useQuery({
+    username,
+  });
 
   useEffect(() => {
     if (data) {
@@ -55,6 +66,9 @@ const IssuePage: NextPage = () => {
       setStatus(data.status as STATUS);
       setID(data.id);
       setCreated(data.createdAt);
+      setPriority(data.priority);
+      setAssigned(data.assignedUsername);
+      setImage(data.assignedImage);
     }
   }, [data]);
 
@@ -87,28 +101,64 @@ const IssuePage: NextPage = () => {
     }
   };
 
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "LOW":
+        return "bg-blue-400";
+      case "MEDIUM":
+        return "bg-purple-400";
+      case "HIGH":
+        return "bg-orange-400";
+      default:
+        return "";
+    }
+  };
+
+  const handleAssignChange = (username: string, image: string) => {
+    setAssigned(username);
+    setImage(image);
+  };
+
   return (
     <div className="mx-auto mb-20 max-w-2xl space-y-4 px-2 py-2">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
-          <div className="flex justify-end space-x-2 py-2">
-            {!edit && <Button onClick={handleDelete}>Delete</Button>}
+          <div className="flex items-center space-x-2 py-2">
             {!edit && (
-              <Button variant="outline" onClick={() => setEdit(!edit)}>
+              <Button className="w-1/2" onClick={handleDelete}>
+                Delete
+              </Button>
+            )}
+            {!edit && (
+              <Button
+                className="w-1/2"
+                variant="outline"
+                onClick={() => setEdit(!edit)}
+              >
                 Edit
               </Button>
             )}
             {edit && <Button onClick={() => setEdit(!edit)}>Cancel</Button>}
           </div>
-          <span className="flex justify-between py-1">
+          <span className=" flex items-center justify-between py-0">
             <p className=" text-sm leading-none tracking-wide text-gray-500">
               Created {dayjs(created).fromNow()}
             </p>
-            <p className="py-0 text-sm leading-none tracking-wide text-gray-500">
-              {dayjs(created).format("DD/MM/YYYY")}
-            </p>
+            <div className="flex flex-row items-center">
+              <Badge className={`${getBadgeColor(status)} text-center`}>
+                {status}
+              </Badge>
+              <input
+                type="radio"
+                disabled
+                className={`ml-5 ${getPriorityColor(priority)}`}
+              />
+              <p className="py-0 pl-5 text-sm leading-none tracking-wide text-gray-500">
+                {dayjs(created).format("DD/MM/YYYY")}
+              </p>
+            </div>
           </span>
           <Card className="shadow-md shadow-stone-200">
             <CardFooter className="py-2">
@@ -136,12 +186,7 @@ const IssuePage: NextPage = () => {
             </CardFooter>
             <CardFooter className="justify-between border-t py-2">
               <div className="flex w-full items-center justify-between">
-                <span className="text-gray-500">Status</span>
-                {!edit && (
-                  <Badge className={`${getBadgeColor(status)} text-center`}>
-                    {status}
-                  </Badge>
-                )}
+                {edit && <span className="text-gray-500">Status</span>}
                 {edit && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -167,6 +212,66 @@ const IssuePage: NextPage = () => {
                 )}
               </div>
             </CardFooter>
+            {edit && (
+              <CardFooter className="justify-between border-t py-1">
+                <h2 className="text-gray-500">Change priority</h2>
+                <div>
+                  <input
+                    className="m-2 h-5 w-5 bg-blue-500 text-blue-500"
+                    type="radio"
+                    value={Priority.LOW}
+                    onChange={() => setPriority(Priority.LOW)}
+                  />
+                  <input
+                    type="radio"
+                    className="m-2 h-5 w-5 bg-purple-500 text-purple-500"
+                    value={Priority.MEDIUM}
+                    onChange={() => setPriority(Priority.MEDIUM)}
+                  />
+                  <input
+                    type="radio"
+                    className="m-2 h-5 w-5 bg-orange-500 text-orange-500"
+                    value={Priority.HIGH}
+                    onChange={() => setPriority(Priority.HIGH)}
+                  />
+                </div>
+              </CardFooter>
+            )}
+            {edit && (
+              <CardFooter className="justify-between border-t py-2">
+                <span className="text-gray-500">Assign</span>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  onFocus={() => setShowDataList(true)}
+                  onBlur={() => setShowDataList(false)}
+                  className="search rounded-full  px-1 py-1"
+                />
+                {showDataList && (
+                  <ul className="search absolute top-full z-50 mt-1 w-full bg-white shadow-md">
+                    {resp?.data?.map((user) => (
+                      <li
+                        key={user.id}
+                        className="flex flex-row px-4 py-2 hover:bg-gray-100"
+                        onClick={() =>
+                          handleAssignChange(user.username, user.img_url)
+                        }
+                      >
+                        <Image
+                          src={user.img_url ?? ""}
+                          width={30}
+                          height={30}
+                          alt="Avatar"
+                          className="h-20 w-20 rounded-full object-cover"
+                        />
+                        {user.username}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardFooter>
+            )}
             {edit && (
               <CardFooter className="items-center justify-end border-t py-2">
                 <Button className="w-full" onClick={handleSubmit}>

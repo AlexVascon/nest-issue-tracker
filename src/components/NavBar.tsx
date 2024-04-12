@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { Button } from "src/components/ui/button";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 const NavBar = () => {
+  const { user } = useUser();
   return (
-    <div className="flex h-12 items-center border-b px-4 shadow-md shadow-stone-200">
+    <div className="flex h-12 items-center px-4 ">
       <Link
         className="inline-flex items-center space-x-2 text-sm font-medium"
         href="/dashboard"
@@ -18,6 +20,15 @@ const NavBar = () => {
             Sign out
           </Button>
         </SignOutButton>
+        {user && (
+          <Image
+            src={user.imageUrl ?? ""}
+            width={10}
+            height={10}
+            alt="Avatar"
+            className="h-8 w-8 rounded-full object-cover"
+          />
+        )}
       </div>
     </div>
   );

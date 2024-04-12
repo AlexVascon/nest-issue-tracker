@@ -1,5 +1,7 @@
+import { clerkClient } from "@clerk/nextjs";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { filterUserForClient } from "~/server/helpers/fetchUserForClient";
 
 export const issueRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -9,6 +11,9 @@ export const issueRouter = createTRPCRouter({
     z.object({
       title: z.string(),
       description: z.string(),
+      priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
+      assigned: z.string(),
+      image: z.string(),
       authorId: z.string(),
     })
   )
@@ -18,6 +23,9 @@ export const issueRouter = createTRPCRouter({
       data: {
         title: input.title,
         description: input.description,
+        priority: input.priority,
+        assignedUsername: input.assigned,
+        assignedImage: input.image,
         authorId: input.authorId,
       },
     });
@@ -88,4 +96,23 @@ export const issueRouter = createTRPCRouter({
       }
     });
   }),
+  assign: publicProcedure.input(
+    z.object({
+      username: z.string(),
+    })
+  )
+  .query(async ({ ctx, input }) => {
+
+    const users = (
+      await clerkClient.users.getUserList({
+        username: [input.username],
+        limit: 110,
+      })
+    ).map(filterUserForClient);
+
+    return users;
+  } 
+  ),
+
+
 });

@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useRouter } from "next/router";
 import LoadingSpinner from "~/components/LoadingSpinner";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import Image from "next/image";
 dayjs.extend(relativeTime);
 
 enum FILTER {
@@ -75,7 +75,7 @@ const Dashboard: NextPage = () => {
       case "LOW":
         return "bg-blue-400";
       case "MEDIUM":
-        return "bg-yellow-400";
+        return "bg-purple-400";
       case "HIGH":
         return "bg-orange-400";
       default:
@@ -141,24 +141,25 @@ const Dashboard: NextPage = () => {
                     </TableCell>
                     <TableCell>
                       <Badge
-                        className={`${getBadgeColor(issue.status)} w-[120px] text-center`}
+                        className={`${getBadgeColor(issue.status)}  text-center`}
                       >
                         {issue.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <Badge
-                        className={`${getPriorityColor(issue.priority)} w-[120px] text-center`}
-                      >
-                        {issue.priority}
-                      </Badge>
+                        className={`${getPriorityColor(issue.priority)} rounded-full p-2.5`}
+                      ></Badge>
                     </TableCell>
                     <TableCell>{dayjs(issue.createdAt).fromNow()}</TableCell>
                     <TableCell>
-                      <Avatar className="mt-1.5 h-11 w-11 border">
-                        <AvatarImage alt="@shadcn" src={issue.assignedImage} />
-                        <AvatarFallback>AC</AvatarFallback>
-                      </Avatar>
+                      <Image
+                        src={issue.assignedUsername ?? ""}
+                        width={10}
+                        height={10}
+                        alt="Avatar"
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
                       {issue.assignedUsername}
                     </TableCell>
                   </TableRow>
