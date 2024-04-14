@@ -55,11 +55,6 @@ const Create: NextPage = () => {
     }
   };
 
-  const handleAssignChange = (username: string, image: string) => {
-    setAssigned(username);
-    setImage(image);
-  };
-
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 px-4">
       <div className="space-y-2 pt-6">
@@ -146,9 +141,10 @@ const Create: NextPage = () => {
                   <li
                     key={user.id}
                     className="flex flex-row px-4 py-2 hover:bg-gray-100"
-                    onClick={() =>
-                      handleAssignChange(user.username, user.img_url)
-                    }
+                    onClick={() => {
+                      setAssigned(user.username);
+                      setImage(user.img_url);
+                    }}
                   >
                     <Image
                       src={user.img_url ?? ""}

@@ -70,7 +70,7 @@ const IssuePage: NextPage = () => {
       setID(data.id);
       setCreated(data.createdAt);
       setPriority(data.priority);
-      setAssigned(data.assignedUsername);
+      setAssigned(data.assignedUsername ?? "");
       setImage(data.assignedImage);
     }
   }, [data]);
