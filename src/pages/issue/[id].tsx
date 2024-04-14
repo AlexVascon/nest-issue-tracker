@@ -150,8 +150,10 @@ const IssuePage: NextPage = () => {
               Created {dayjs(created).fromNow()}
             </p>
             <div className="flex flex-row items-center">
-              <Badge className={`${getBadgeColor(status)} text-center`}>
-                {status}
+              <Badge
+                className={`${getBadgeColor(data?.status ?? "")} text-center`}
+              >
+                {data?.status}
               </Badge>
               <input
                 type="radio"
@@ -195,34 +197,36 @@ const IssuePage: NextPage = () => {
                 />
               )}
             </CardFooter>
-            <CardFooter className="justify-between border-t py-2">
-              <div className="flex w-full items-center justify-between">
-                {edit && <span className="text-gray-500">Status</span>}
-                {edit && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        className="w-[140px] justify-between"
-                        variant="outline"
-                      >
-                        {status}
-                        <ChevronDownIcon className="h-4 w-4 -translate-y-0.5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="min-w-[140px]">
-                      {Object.values(STATUS).map((status) => (
-                        <DropdownMenuItem
-                          key={status}
-                          onClick={() => setStatus(status)}
+            {edit && (
+              <CardFooter className="justify-between border-t py-2">
+                <div className="flex w-full items-center justify-between">
+                  {edit && <span className="text-gray-500">Status</span>}
+                  {edit && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className={`w-[140px] justify-between ${getBadgeColor(status ?? "")}`}
+                          variant="outline"
                         >
                           {status}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </div>
-            </CardFooter>
+                          <ChevronDownIcon className="h-4 w-4 -translate-y-0.5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="min-w-[140px]">
+                        {Object.values(STATUS).map((status) => (
+                          <DropdownMenuItem
+                            key={status}
+                            onClick={() => setStatus(status)}
+                          >
+                            {status}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </div>
+              </CardFooter>
+            )}
             {edit && (
               <CardFooter className="justify-between border-t py-1">
                 <h2 className="text-gray-500">Change priority</h2>
@@ -232,18 +236,21 @@ const IssuePage: NextPage = () => {
                     type="radio"
                     value={Priority.LOW}
                     onChange={() => setPriority(Priority.LOW)}
+                    name="priority"
                   />
                   <input
                     type="radio"
                     className="m-2 h-5 w-5 bg-purple-500 text-purple-500"
                     value={Priority.MEDIUM}
                     onChange={() => setPriority(Priority.MEDIUM)}
+                    name="priority"
                   />
                   <input
                     type="radio"
                     className="m-2 h-5 w-5 bg-orange-500 text-orange-500"
                     value={Priority.HIGH}
                     onChange={() => setPriority(Priority.HIGH)}
+                    name="priority"
                   />
                 </div>
               </CardFooter>
