@@ -55,6 +55,17 @@ const Create: NextPage = () => {
     }
   };
 
+  type Options = {
+    assign: string;
+    image: string;
+  };
+
+  const onOptionClicked = ({ assign, image }: Options) => {
+    setAssigned(assign);
+    setImage(image);
+    setShowDataList(false);
+  };
+
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8 px-4">
       <div className="space-y-2 pt-6">
@@ -91,11 +102,13 @@ const Create: NextPage = () => {
               <input
                 className="m-2 h-5 w-5 bg-blue-500 text-blue-500"
                 type="radio"
+                name="priority"
                 value={Priority.LOW}
                 onChange={() => setPriority(Priority.LOW)}
               />
               <input
                 type="radio"
+                name="priority"
                 className="m-2 h-5 w-5 bg-purple-500 text-purple-500"
                 value={Priority.MEDIUM}
                 onChange={() => setPriority(Priority.MEDIUM)}
@@ -104,24 +117,25 @@ const Create: NextPage = () => {
                 type="radio"
                 className="m-2 h-5 w-5 bg-orange-500 text-orange-500"
                 value={Priority.HIGH}
+                name="priority"
                 onChange={() => setPriority(Priority.HIGH)}
               />
             </div>
           </div>
           <div className="relative mt-2 flex flex-row items-center justify-between">
-            <div className="flex ">
+            <div className="flex items-center">
               <span>Assign</span>
               {!assigned && (
                 <span className="pl-2 text-gray-400">Unassigned</span>
               )}
               {assigned && (
-                <div>
+                <div className="flex items-center pl-3">
                   <Image
                     src={image ?? ""}
-                    width={30}
-                    height={30}
+                    width={12}
+                    height={12}
                     alt="Avatar"
-                    className="h-20 w-20 rounded-full object-cover"
+                    className="h-12 w-12 rounded-full object-cover"
                   />
                   <span className="pl-2">{assigned}</span>
                 </div>
@@ -131,29 +145,39 @@ const Create: NextPage = () => {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              onFocus={() => setShowDataList(true)}
-              onBlur={() => setShowDataList(false)}
-              className="search rounded-full  px-1 py-1"
+              onFocus={(e) => {
+                e.preventDefault();
+                setShowDataList(true);
+              }}
+              className="rounded-full  px-1 py-1"
             />
             {showDataList && (
-              <ul className="search absolute top-full z-50 mt-1 w-full bg-white shadow-md">
+              <ul className="absolute top-full z-50 mt-1 w-full bg-white shadow-md">
+                <li
+                  className="relative flex cursor-default select-none flex-row items-center px-4 py-2 hover:bg-gray-100"
+                  onClick={() => onOptionClicked({ assign: "", image: "" })}
+                >
+                  Unassign
+                </li>
                 {data?.map((user) => (
                   <li
                     key={user.id}
-                    className="flex flex-row px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      setAssigned(user.username);
-                      setImage(user.img_url);
-                    }}
+                    className="relative flex cursor-default select-none flex-row items-center px-4 py-2 hover:bg-gray-100"
+                    onClick={() =>
+                      onOptionClicked({
+                        assign: user.username,
+                        image: user.img_url,
+                      })
+                    }
                   >
                     <Image
                       src={user.img_url ?? ""}
-                      width={30}
-                      height={30}
+                      width={12}
+                      height={12}
                       alt="Avatar"
-                      className="h-20 w-20 rounded-full object-cover"
+                      className="h-12 w-12 rounded-full"
                     />
-                    {user.username}
+                    <p className="pl-5">{user.username}</p>
                   </li>
                 ))}
               </ul>

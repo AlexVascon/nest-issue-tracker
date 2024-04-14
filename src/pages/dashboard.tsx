@@ -152,15 +152,15 @@ const Dashboard: NextPage = () => {
                       ></Badge>
                     </TableCell>
                     <TableCell>{dayjs(issue.createdAt).fromNow()}</TableCell>
-                    <TableCell>
+                    <TableCell className="flex items-center">
                       <Image
-                        src={issue.assignedUsername ?? ""}
+                        src={issue.assignedImage ?? ""}
                         width={10}
                         height={10}
                         alt="Avatar"
                         className="h-8 w-8 rounded-full object-cover"
                       />
-                      {issue.assignedUsername}
+                      <p className="pl-3">{issue.assignedUsername}</p>
                     </TableCell>
                   </TableRow>
                 ))}

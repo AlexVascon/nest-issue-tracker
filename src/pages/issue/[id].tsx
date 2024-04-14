@@ -117,9 +117,15 @@ const IssuePage: NextPage = () => {
     }
   };
 
-  const handleAssignChange = (username: string, image: string) => {
-    setAssigned(username);
+  type Options = {
+    assign: string;
+    image: string;
+  };
+
+  const onOptionClicked = ({ assign, image }: Options) => {
+    setAssigned(assign);
     setImage(image);
+    setShowDataList(false);
   };
 
   return (
@@ -158,7 +164,7 @@ const IssuePage: NextPage = () => {
               <input
                 type="radio"
                 disabled
-                className={`ml-5 ${getPriorityColor(priority)}`}
+                className={`ml-5 ${getPriorityColor(data?.priority ?? "")}`}
               />
               <p className="py-0 pl-5 text-sm leading-none tracking-wide text-gray-500">
                 {dayjs(created).format("DD/MM/YYYY")}
@@ -256,34 +262,42 @@ const IssuePage: NextPage = () => {
               </CardFooter>
             )}
             {edit && (
-              <CardFooter className="justify-between border-t py-2">
-                <span className="text-gray-500">Assign</span>
+              <CardFooter className="justify-between border-t py-2 pl-0">
+                <span className="pl-7 text-gray-500">Assign</span>
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   onFocus={() => setShowDataList(true)}
-                  onBlur={() => setShowDataList(false)}
-                  className="search rounded-full  px-1 py-1"
+                  className="rounded-full  px-1 py-1"
                 />
                 {showDataList && (
-                  <ul className="search absolute top-full z-50 mt-1 w-full bg-white shadow-md">
+                  <ul className="top-300 absolute bottom-8 z-50 ml-0 flex min-w-[654px] bg-white shadow-md">
+                    <li
+                      className="relative flex cursor-default select-none flex-row items-center px-4 py-2 hover:bg-gray-100"
+                      onClick={() => onOptionClicked({ assign: "", image: "" })}
+                    >
+                      Unassign
+                    </li>
                     {resp?.data?.map((user) => (
                       <li
                         key={user.id}
-                        className="flex flex-row px-4 py-2 hover:bg-gray-100"
+                        className="flex max-w-[700px] flex-row items-center hover:bg-gray-100"
                         onClick={() =>
-                          handleAssignChange(user.username, user.img_url)
+                          onOptionClicked({
+                            assign: user.username,
+                            image: user.img_url,
+                          })
                         }
                       >
                         <Image
                           src={user.img_url ?? ""}
-                          width={30}
-                          height={30}
+                          width={16}
+                          height={16}
                           alt="Avatar"
-                          className="h-20 w-20 rounded-full object-cover"
+                          className="my-2 ml-3 h-16 w-16 rounded-full object-cover"
                         />
-                        {user.username}
+                        <p className="pl-5">{user.username}</p>
                       </li>
                     ))}
                   </ul>
