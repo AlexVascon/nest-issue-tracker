@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     const performLogin = async () => {
       if (!isLoaded) {
-        router.push("/landing");
+        void router.push("/landing");
       } else if (user) {
         const { username, firstName, imageUrl } = user;
 
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
             username: username ?? firstName ?? "",
             img_url: imageUrl,
           });
-          router.push("/dashboard");
+          void router.push("/dashboard");
         } catch (error) {
           console.error("Error occurred during login:", error);
         }
