@@ -30,7 +30,7 @@ const Home: NextPage = () => {
       }
     };
 
-    performLogin();
+    void performLogin();
   }, [isLoaded, user, router, login]);
 
   return (
