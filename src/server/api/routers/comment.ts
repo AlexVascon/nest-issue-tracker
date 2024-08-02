@@ -24,15 +24,6 @@ const addUserDataToComment = async (comments: Comment[]) => {
         message: `Author for post not found. POST ID: ${comment.id}, USER ID: ${comment.authorId}`,
       });
     }
-    if (!author.username) {
-      if (!author.externalUsername) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: `Author has no GitHub Account: ${author.id}`,
-        });
-      }
-      author.username = author.externalUsername;
-    }
 
     return {
       comment,
