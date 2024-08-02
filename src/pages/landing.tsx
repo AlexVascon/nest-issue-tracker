@@ -10,19 +10,26 @@ const Landing: NextPage = () => {
   const login = api.user.login.useMutation();
 
   useEffect(() => {
-    if (isLoaded) router.push("/landing");
-    if (isLoaded && user) {
-      login
-        .mutateAsync({
-          username: user.firstName ?? user.username ?? "",
-          img_url: user.imageUrl,
-        })
-        .then(() => router.push("/dashboard"))
-        .catch((error) => {
+    const performLogin = async () => {
+      if (!isLoaded) {
+        router.push("/landing");
+      } else if (user) {
+        const { username, firstName, imageUrl } = user;
+
+        try {
+          await login.mutateAsync({
+            username: username ?? firstName ?? "",
+            img_url: imageUrl,
+          });
+          router.push("/dashboard");
+        } catch (error) {
           console.error("Error occurred during login:", error);
-        });
-    }
-  }, [isLoaded, user]);
+        }
+      }
+    };
+
+    performLogin();
+  }, [isLoaded, user, router, login]);
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center p-4">
