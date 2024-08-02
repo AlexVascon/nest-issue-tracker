@@ -12,16 +12,21 @@ const Home: NextPage = () => {
   const login = api.user.login.useMutation();
 
   useEffect(() => {
-    if (user) {
-      const { username, imageUrl } = user;
+    if (!isLoaded) router.push("/landing");
+    if (isLoaded && user) {
+      const { username, firstName, imageUrl } = user;
+
       login
-        .mutateAsync({ username: username ?? "", img_url: imageUrl })
+        .mutateAsync({
+          username: username ?? firstName ?? "",
+          img_url: imageUrl,
+        })
         .then(() => router.push("/dashboard"))
         .catch((error) => {
           console.error("Error occurred during login:", error);
         });
     }
-  }, [user]);
+  }, [isLoaded, user]);
 
   return (
     <>

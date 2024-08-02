@@ -7,29 +7,33 @@ const NavBar = () => {
   const { user } = useUser();
   return (
     <div className="flex h-12 items-center px-4 ">
-      <Link
-        className="inline-flex items-center space-x-2 text-sm font-medium"
-        href="/dashboard"
-      >
-        <PackageIcon className="h-5 w-5" />
-        <span>Home</span>
-      </Link>
-      <div className="ml-auto flex items-center space-x-4">
-        <SignOutButton>
-          <Button size="sm" variant="outline" className="border-none">
-            Sign out
-          </Button>
-        </SignOutButton>
-        {user && (
-          <Image
-            src={user.imageUrl ?? ""}
-            width={10}
-            height={10}
-            alt="Avatar"
-            className="h-8 w-8 rounded-full object-cover"
-          />
-        )}
-      </div>
+      {user && (
+        <>
+          <Link
+            className="inline-flex items-center space-x-2 text-sm font-medium"
+            href="/dashboard"
+          >
+            <PackageIcon className="h-5 w-5" />
+            <span>Home</span>
+          </Link>
+          <div className="ml-auto flex items-center space-x-4">
+            <SignOutButton>
+              <Button size="sm" variant="outline" className="border-none">
+                Sign out
+              </Button>
+            </SignOutButton>
+            {user && (
+              <Image
+                src={user.imageUrl ?? ""}
+                width={10}
+                height={10}
+                alt="Avatar"
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -48,6 +48,7 @@ export const issueRouter = createTRPCRouter({
       id: z.number(),
       title: z.string(),
       description: z.string(),
+      image: z.optional(z.string()),
       status: z.enum(['OPEN', 'CLOSED', 'IN_PROGRESS'])
     })
   )
@@ -60,7 +61,8 @@ export const issueRouter = createTRPCRouter({
       data: {
         title: input.title,
         description: input.description,
-        status: input.status
+        status: input.status,
+        assignedImage: input.image
       }
     });
   }),

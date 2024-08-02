@@ -24,6 +24,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useRouter } from "next/router";
 import LoadingSpinner from "~/components/LoadingSpinner";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
 dayjs.extend(relativeTime);
 
 enum FILTER {
